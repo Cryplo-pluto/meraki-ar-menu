@@ -9,38 +9,320 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TablePlannerRouteImport } from './routes/table-planner'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as OrderRouteImport } from './routes/order'
+import { Route as MenuRouteImport } from './routes/menu'
+import { Route as LocationsRouteImport } from './routes/locations'
+import { Route as CateringRouteImport } from './routes/catering'
+import { Route as CakesRouteImport } from './routes/cakes'
+import { Route as CakeBuilderRouteImport } from './routes/cake-builder'
+import { Route as ArRouteImport } from './routes/ar'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MenuIndexRouteImport } from './routes/menu.index'
+import { Route as LocationsIndexRouteImport } from './routes/locations.index'
+import { Route as CakesIndexRouteImport } from './routes/cakes.index'
+import { Route as MenuCategoryRouteImport } from './routes/menu.$category'
+import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
+import { Route as CakesSlugRouteImport } from './routes/cakes.$slug'
+import { Route as MenuCategorySlugRouteImport } from './routes/menu.$category.$slug'
 
+const TablePlannerRoute = TablePlannerRouteImport.update({
+  id: '/table-planner',
+  path: '/table-planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OrderRoute = OrderRouteImport.update({
+  id: '/order',
+  path: '/order',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MenuRoute = MenuRouteImport.update({
+  id: '/menu',
+  path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LocationsRoute = LocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CateringRoute = CateringRouteImport.update({
+  id: '/catering',
+  path: '/catering',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CakesRoute = CakesRouteImport.update({
+  id: '/cakes',
+  path: '/cakes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CakeBuilderRoute = CakeBuilderRouteImport.update({
+  id: '/cake-builder',
+  path: '/cake-builder',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArRoute = ArRouteImport.update({
+  id: '/ar',
+  path: '/ar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MenuIndexRoute = MenuIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MenuRoute,
+} as any)
+const LocationsIndexRoute = LocationsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => LocationsRoute,
+} as any)
+const CakesIndexRoute = CakesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CakesRoute,
+} as any)
+const MenuCategoryRoute = MenuCategoryRouteImport.update({
+  id: '/$category',
+  path: '/$category',
+  getParentRoute: () => MenuRoute,
+} as any)
+const LocationsSlugRoute = LocationsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => LocationsRoute,
+} as any)
+const CakesSlugRoute = CakesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => CakesRoute,
+} as any)
+const MenuCategorySlugRoute = MenuCategorySlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => MenuCategoryRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ar': typeof ArRoute
+  '/cake-builder': typeof CakeBuilderRoute
+  '/cakes': typeof CakesRouteWithChildren
+  '/catering': typeof CateringRoute
+  '/locations': typeof LocationsRouteWithChildren
+  '/menu': typeof MenuRouteWithChildren
+  '/order': typeof OrderRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/table-planner': typeof TablePlannerRoute
+  '/cakes/$slug': typeof CakesSlugRoute
+  '/locations/$slug': typeof LocationsSlugRoute
+  '/menu/$category': typeof MenuCategoryRouteWithChildren
+  '/cakes/': typeof CakesIndexRoute
+  '/locations/': typeof LocationsIndexRoute
+  '/menu/': typeof MenuIndexRoute
+  '/menu/$category/$slug': typeof MenuCategorySlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ar': typeof ArRoute
+  '/cake-builder': typeof CakeBuilderRoute
+  '/catering': typeof CateringRoute
+  '/order': typeof OrderRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/table-planner': typeof TablePlannerRoute
+  '/cakes/$slug': typeof CakesSlugRoute
+  '/locations/$slug': typeof LocationsSlugRoute
+  '/menu/$category': typeof MenuCategoryRouteWithChildren
+  '/cakes': typeof CakesIndexRoute
+  '/locations': typeof LocationsIndexRoute
+  '/menu': typeof MenuIndexRoute
+  '/menu/$category/$slug': typeof MenuCategorySlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/ar': typeof ArRoute
+  '/cake-builder': typeof CakeBuilderRoute
+  '/cakes': typeof CakesRouteWithChildren
+  '/catering': typeof CateringRoute
+  '/locations': typeof LocationsRouteWithChildren
+  '/menu': typeof MenuRouteWithChildren
+  '/order': typeof OrderRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/table-planner': typeof TablePlannerRoute
+  '/cakes/$slug': typeof CakesSlugRoute
+  '/locations/$slug': typeof LocationsSlugRoute
+  '/menu/$category': typeof MenuCategoryRouteWithChildren
+  '/cakes/': typeof CakesIndexRoute
+  '/locations/': typeof LocationsIndexRoute
+  '/menu/': typeof MenuIndexRoute
+  '/menu/$category/$slug': typeof MenuCategorySlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/ar'
+    | '/cake-builder'
+    | '/cakes'
+    | '/catering'
+    | '/locations'
+    | '/menu'
+    | '/order'
+    | '/sitemap.xml'
+    | '/table-planner'
+    | '/cakes/$slug'
+    | '/locations/$slug'
+    | '/menu/$category'
+    | '/cakes/'
+    | '/locations/'
+    | '/menu/'
+    | '/menu/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/ar'
+    | '/cake-builder'
+    | '/catering'
+    | '/order'
+    | '/sitemap.xml'
+    | '/table-planner'
+    | '/cakes/$slug'
+    | '/locations/$slug'
+    | '/menu/$category'
+    | '/cakes'
+    | '/locations'
+    | '/menu'
+    | '/menu/$category/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/ar'
+    | '/cake-builder'
+    | '/cakes'
+    | '/catering'
+    | '/locations'
+    | '/menu'
+    | '/order'
+    | '/sitemap.xml'
+    | '/table-planner'
+    | '/cakes/$slug'
+    | '/locations/$slug'
+    | '/menu/$category'
+    | '/cakes/'
+    | '/locations/'
+    | '/menu/'
+    | '/menu/$category/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  ArRoute: typeof ArRoute
+  CakeBuilderRoute: typeof CakeBuilderRoute
+  CakesRoute: typeof CakesRouteWithChildren
+  CateringRoute: typeof CateringRoute
+  LocationsRoute: typeof LocationsRouteWithChildren
+  MenuRoute: typeof MenuRouteWithChildren
+  OrderRoute: typeof OrderRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TablePlannerRoute: typeof TablePlannerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/table-planner': {
+      id: '/table-planner'
+      path: '/table-planner'
+      fullPath: '/table-planner'
+      preLoaderRoute: typeof TablePlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/order': {
+      id: '/order'
+      path: '/order'
+      fullPath: '/order'
+      preLoaderRoute: typeof OrderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/menu': {
+      id: '/menu'
+      path: '/menu'
+      fullPath: '/menu'
+      preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/locations': {
+      id: '/locations'
+      path: '/locations'
+      fullPath: '/locations'
+      preLoaderRoute: typeof LocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catering': {
+      id: '/catering'
+      path: '/catering'
+      fullPath: '/catering'
+      preLoaderRoute: typeof CateringRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cakes': {
+      id: '/cakes'
+      path: '/cakes'
+      fullPath: '/cakes'
+      preLoaderRoute: typeof CakesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cake-builder': {
+      id: '/cake-builder'
+      path: '/cake-builder'
+      fullPath: '/cake-builder'
+      preLoaderRoute: typeof CakeBuilderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ar': {
+      id: '/ar'
+      path: '/ar'
+      fullPath: '/ar'
+      preLoaderRoute: typeof ArRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +330,120 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/menu/': {
+      id: '/menu/'
+      path: '/'
+      fullPath: '/menu/'
+      preLoaderRoute: typeof MenuIndexRouteImport
+      parentRoute: typeof MenuRoute
+    }
+    '/locations/': {
+      id: '/locations/'
+      path: '/'
+      fullPath: '/locations/'
+      preLoaderRoute: typeof LocationsIndexRouteImport
+      parentRoute: typeof LocationsRoute
+    }
+    '/cakes/': {
+      id: '/cakes/'
+      path: '/'
+      fullPath: '/cakes/'
+      preLoaderRoute: typeof CakesIndexRouteImport
+      parentRoute: typeof CakesRoute
+    }
+    '/menu/$category': {
+      id: '/menu/$category'
+      path: '/$category'
+      fullPath: '/menu/$category'
+      preLoaderRoute: typeof MenuCategoryRouteImport
+      parentRoute: typeof MenuRoute
+    }
+    '/locations/$slug': {
+      id: '/locations/$slug'
+      path: '/$slug'
+      fullPath: '/locations/$slug'
+      preLoaderRoute: typeof LocationsSlugRouteImport
+      parentRoute: typeof LocationsRoute
+    }
+    '/cakes/$slug': {
+      id: '/cakes/$slug'
+      path: '/$slug'
+      fullPath: '/cakes/$slug'
+      preLoaderRoute: typeof CakesSlugRouteImport
+      parentRoute: typeof CakesRoute
+    }
+    '/menu/$category/$slug': {
+      id: '/menu/$category/$slug'
+      path: '/$slug'
+      fullPath: '/menu/$category/$slug'
+      preLoaderRoute: typeof MenuCategorySlugRouteImport
+      parentRoute: typeof MenuCategoryRoute
+    }
   }
 }
 
+interface CakesRouteChildren {
+  CakesSlugRoute: typeof CakesSlugRoute
+  CakesIndexRoute: typeof CakesIndexRoute
+}
+
+const CakesRouteChildren: CakesRouteChildren = {
+  CakesSlugRoute: CakesSlugRoute,
+  CakesIndexRoute: CakesIndexRoute,
+}
+
+const CakesRouteWithChildren = CakesRoute._addFileChildren(CakesRouteChildren)
+
+interface LocationsRouteChildren {
+  LocationsSlugRoute: typeof LocationsSlugRoute
+  LocationsIndexRoute: typeof LocationsIndexRoute
+}
+
+const LocationsRouteChildren: LocationsRouteChildren = {
+  LocationsSlugRoute: LocationsSlugRoute,
+  LocationsIndexRoute: LocationsIndexRoute,
+}
+
+const LocationsRouteWithChildren = LocationsRoute._addFileChildren(
+  LocationsRouteChildren,
+)
+
+interface MenuCategoryRouteChildren {
+  MenuCategorySlugRoute: typeof MenuCategorySlugRoute
+}
+
+const MenuCategoryRouteChildren: MenuCategoryRouteChildren = {
+  MenuCategorySlugRoute: MenuCategorySlugRoute,
+}
+
+const MenuCategoryRouteWithChildren = MenuCategoryRoute._addFileChildren(
+  MenuCategoryRouteChildren,
+)
+
+interface MenuRouteChildren {
+  MenuCategoryRoute: typeof MenuCategoryRouteWithChildren
+  MenuIndexRoute: typeof MenuIndexRoute
+}
+
+const MenuRouteChildren: MenuRouteChildren = {
+  MenuCategoryRoute: MenuCategoryRouteWithChildren,
+  MenuIndexRoute: MenuIndexRoute,
+}
+
+const MenuRouteWithChildren = MenuRoute._addFileChildren(MenuRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  ArRoute: ArRoute,
+  CakeBuilderRoute: CakeBuilderRoute,
+  CakesRoute: CakesRouteWithChildren,
+  CateringRoute: CateringRoute,
+  LocationsRoute: LocationsRouteWithChildren,
+  MenuRoute: MenuRouteWithChildren,
+  OrderRoute: OrderRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TablePlannerRoute: TablePlannerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,12 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { listSignatureItems, listBranches } from "@/lib/menu.functions";
+import { listSignatureItems, listBranches, type MenuItem, type Branch } from "@/lib/menu.functions";
 import { MenuCard } from "@/components/MenuCard";
 import { Section } from "@/components/Section";
 import { Box, MapPin } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async () => ({
+  loader: async (): Promise<{ signatures: MenuItem[]; branches: Branch[] }> => ({
     signatures: await listSignatureItems(),
     branches: await listBranches(),
   }),

@@ -10,7 +10,7 @@ export function MenuCard({ item, hrefBase }: { item: MenuItem; hrefBase: string 
       <a href={href} className="relative block aspect-[4/3] overflow-hidden bg-muted">
         <img src={item.image_url} alt={item.image_alt || item.name} className="h-full w-full object-cover transition group-hover:scale-[1.03]" loading="lazy" />
         <div className="absolute inset-x-0 bottom-0 scrim-gradient p-3">
-          <p className="text-xs font-medium text-white/95">{item.dimensions_label}</p>
+          <p className="text-xs font-medium text-white/95">{item.effective_dimensions_label || item.dimensions_label}</p>
         </div>
       </a>
       <div className="flex flex-1 flex-col gap-3 p-4">

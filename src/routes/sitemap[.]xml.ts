@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { listAllSlugs, listBranches } from "@/lib/menu.functions";
 
-const BASE_URL = "";
+// TODO: set to the confirmed production domain when custom domain is live.
+const BASE_URL = "https://meraki-ar-menu.lovable.app";
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -10,7 +11,7 @@ export const Route = createFileRoute("/sitemap.xml")({
       GET: async () => {
         const [slugs, branches] = await Promise.all([listAllSlugs(), listBranches()]);
         const cats = ["all-day-breakfast", "burgers", "bowls", "smoothies", "coffee", "sweets"];
-        const staticPaths = ["/", "/menu", "/cakes", "/cake-builder", "/locations", "/catering", "/about", "/ar", "/table-planner"];
+        const staticPaths = ["/", "/menu", "/cakes", "/cake-builder", "/locations", "/catering", "/about", "/ar", "/table-planner", "/order"];
         const urls: string[] = [
           ...staticPaths.map((p) => `${BASE_URL}${p}`),
           ...cats.map((c) => `${BASE_URL}/menu/${c}`),

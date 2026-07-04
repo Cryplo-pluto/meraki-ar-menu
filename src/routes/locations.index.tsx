@@ -31,12 +31,17 @@ function LocationsIndex() {
           <article key={b.slug} className="flex flex-col rounded-2xl border border-border/60 bg-card p-6 warm-shadow">
             <MapPin className="h-5 w-5 text-accent" />
             <h2 className="mt-3 text-2xl">{b.name}</h2>
-            <p className="mt-2 text-sm text-muted-foreground">{b.address}</p>
-            <p className="mt-4 text-xs uppercase tracking-widest text-muted-foreground">Open Mon–Sun · 07:00–21:00</p>
+            {b.address && b.address !== "Address to be confirmed" ? (
+              <p className="mt-2 text-sm text-muted-foreground">{b.address}</p>
+            ) : (
+              <p className="mt-2 text-sm italic text-muted-foreground/80">Address being confirmed.</p>
+            )}
             <div className="mt-6 flex flex-col gap-2">
-              <a href={`tel:${b.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110">
-                <Phone className="h-4 w-4" aria-hidden="true" /> Call to book
-              </a>
+              {b.phone && (
+                <a href={`tel:${b.phone.replace(/\s/g, "")}`} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:brightness-110">
+                  <Phone className="h-4 w-4" aria-hidden="true" /> Call to book
+                </a>
+              )}
               <Link to="/locations/$slug" params={{ slug: b.slug }} className="min-h-11 rounded-full border border-border px-4 py-2 text-center text-sm font-semibold text-foreground hover:bg-muted">
                 Branch details
               </Link>

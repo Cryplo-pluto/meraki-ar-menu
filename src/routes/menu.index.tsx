@@ -18,7 +18,7 @@ export const Route = createFileRoute("/menu/")({
   errorComponent: ({ error }) => (
     <div className="container-page py-24 text-center">
       <h1 className="text-3xl">The menu didn't load</h1>
-      <p className="mt-3 text-muted-foreground">Likely a slow connection. Refresh to try again, or call Rhodespark on +260 977 000 001 and we'll talk you through it.</p>
+      <p className="mt-3 text-muted-foreground">Likely a slow connection. Refresh to try again, or head to Locations for our branch details.</p>
       <p className="mt-6 text-xs text-muted-foreground/70">Error: {error.message}</p>
     </div>
   ),
@@ -44,6 +44,14 @@ function MenuIndex() {
           Everything is made in our kitchen, fresh each morning — from all-day breakfasts to bowls, burgers and smoothies.
         </p>
       </header>
+
+      {items.length === 0 && (
+        <p className="mx-auto mt-10 max-w-2xl rounded-2xl border border-dashed border-border/70 bg-card/60 p-8 text-center text-muted-foreground">
+          Our full menu with photos is being uploaded — here's what's ready:
+          <br />
+          <span className="mt-2 block text-sm">Nothing yet. Check back very soon.</span>
+        </p>
+      )}
 
       <nav aria-label="Menu categories" className="sticky top-[68px] z-30 -mx-5 mt-10 overflow-x-auto border-b border-border/60 bg-background/85 px-5 py-3 backdrop-blur">
         <ul className="flex min-w-max gap-2">

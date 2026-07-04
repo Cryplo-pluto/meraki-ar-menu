@@ -22,8 +22,7 @@ function Catering() {
           From office breakfasts to wedding cakes — we cater across Lusaka. Tell us about your event and we'll put together a menu.
         </p>
         <div className="mt-8 flex justify-center gap-3">
-          <a href="tel:+260977000001" className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:brightness-110">Call Rhodespark</a>
-          <Link to="/locations" className="min-h-11 rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted">All branch numbers</Link>
+          <Link to="/locations" className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:brightness-110">See branch contact details</Link>
         </div>
       </div>
     </div>

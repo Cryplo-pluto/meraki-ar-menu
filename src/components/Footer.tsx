@@ -1,4 +1,11 @@
 import { Link } from "@tanstack/react-router";
+import { Facebook, Instagram, Globe } from "lucide-react";
+
+const SOCIALS = {
+  facebook: "https://web.facebook.com/merakicafezm",
+  instagram: "https://www.instagram.com/merakicentrolimited",
+  website: "https://www.meraki.co.zm/",
+};
 
 export function Footer() {
   return (
@@ -9,6 +16,23 @@ export function Footer() {
           <p className="mt-2 max-w-sm text-sm text-muted-foreground">
             Meraki — cooked with soul, since 2008. Rhodespark · Eastpark · Kabulonga, Lusaka.
           </p>
+          <ul className="mt-4 flex gap-3">
+            <li>
+              <a href={SOCIALS.facebook} target="_blank" rel="noopener noreferrer" aria-label="Meraki on Facebook" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 hover:border-primary/50 hover:text-primary">
+                <Facebook className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </li>
+            <li>
+              <a href={SOCIALS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Meraki on Instagram" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 hover:border-primary/50 hover:text-primary">
+                <Instagram className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </li>
+            <li>
+              <a href={SOCIALS.website} target="_blank" rel="noopener noreferrer" aria-label="Meraki main website" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground/80 hover:border-primary/50 hover:text-primary">
+                <Globe className="h-4 w-4" aria-hidden="true" />
+              </a>
+            </li>
+          </ul>
         </div>
         <div>
           <h2 className="text-sm font-semibold text-foreground">Explore</h2>

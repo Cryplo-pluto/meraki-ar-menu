@@ -67,11 +67,11 @@ function ItemPage() {
           </div>
           <div id="ar" className="mt-6 aspect-[4/3] scroll-mt-24">
             <ArViewer
-              glbUrl={item.glb_url}
-              usdzUrl={item.usdz_url}
+              glbUrl={item.effective_glb_url}
+              usdzUrl={item.effective_usdz_url}
               posterUrl={item.image_url}
               itemName={item.name}
-              dimensionsLabel={item.dimensions_label}
+              dimensionsLabel={item.effective_dimensions_label || item.dimensions_label}
               autoLaunchAr={Boolean(ar)}
               className="h-full w-full"
             />
@@ -85,7 +85,7 @@ function ItemPage() {
           <h1 className="text-4xl md:text-5xl">{item.name}</h1>
           <p className="mt-3 text-2xl font-semibold text-primary">{formatKwacha(item.price_kwacha)}</p>
           <p className="mt-1 text-sm font-medium text-accent">
-            Shown at actual size — {item.dimensions_label}
+            Shown at actual size — {item.effective_dimensions_label || item.dimensions_label}
           </p>
 
           <p className="mt-6 text-lg leading-relaxed text-foreground/90">{item.description}</p>

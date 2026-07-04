@@ -2,6 +2,7 @@ import { defineTool } from "@lovable.dev/mcp-js";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { isRealAsset } from "@/lib/images";
 
 export default defineTool({
   name: "list_menu_items",
@@ -33,7 +34,7 @@ export default defineTool({
     let query = supabase
       .from("menu_items")
       .select(
-        "name, slug, category, price_kwacha, description, dimensions_label, is_available, is_signature, available_branches, allergens",
+        "name, slug, category, price_kwacha, description, dimensions_label, is_available, is_signature, available_branches, allergens, image_url",
       )
       .eq("is_available", true)
       .order("sort_order", { ascending: true })
@@ -44,9 +45,10 @@ export default defineTool({
     if (error) {
       return { content: [{ type: "text", text: error.message }], isError: true };
     }
+    const filtered = (data ?? []).filter((r) => isRealAsset((r as { image_url: string }).image_url));
     return {
-      content: [{ type: "text", text: JSON.stringify(data, null, 2) }],
-      structuredContent: { items: data ?? [] },
+      content: [{ type: "text", text: JSON.stringify(filtered, null, 2) }],
+      structuredContent: { items: filtered },
     };
   },
 });

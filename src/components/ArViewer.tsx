@@ -72,7 +72,28 @@ export function ArViewer({
     };
   }, [ready, autoLaunchAr, glbUrl]);
 
-  if (!glbUrl || modelError) {
+  // Missing-model state (safety net; visible items always have an effective GLB).
+  if (!glbUrl) {
+    return (
+      <div className={`relative overflow-hidden rounded-2xl bg-muted ${className}`}>
+        <img
+          src={posterUrl}
+          alt={itemName}
+          className="h-full w-full object-cover"
+          loading="lazy"
+        />
+        <div className="absolute inset-x-0 bottom-0 p-4 scrim-gradient">
+          <p className="text-sm font-medium text-white">{dimensionsLabel}</p>
+          <p className="text-xs text-white/85">
+            3D preview coming soon — the size shown is exact: {dimensionsLabel}.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Load error on an otherwise capable device.
+  if (modelError) {
     return (
       <div className={`relative overflow-hidden rounded-2xl bg-muted ${className}`}>
         <img

@@ -13,6 +13,7 @@ import { Route as TablePlannerRouteImport } from './routes/table-planner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as CakesRouteImport } from './routes/cakes'
@@ -26,7 +27,10 @@ import { Route as CakesIndexRouteImport } from './routes/cakes.index'
 import { Route as MenuCategoryRouteImport } from './routes/menu.$category'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as CakesSlugRouteImport } from './routes/cakes.$slug'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as MenuCategorySlugRouteImport } from './routes/menu.$category.$slug'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
 const TablePlannerRoute = TablePlannerRouteImport.update({
   id: '/table-planner',
@@ -46,6 +50,11 @@ const OrderRoute = OrderRouteImport.update({
 const MenuRoute = MenuRouteImport.update({
   id: '/menu',
   path: '/menu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationsRoute = LocationsRouteImport.update({
@@ -113,11 +122,29 @@ const CakesSlugRoute = CakesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CakesRoute,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const MenuCategorySlugRoute = MenuCategorySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => MenuCategoryRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -127,16 +154,20 @@ export interface FileRoutesByFullPath {
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
   '/locations': typeof LocationsRouteWithChildren
+  '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
   '/cakes/': typeof CakesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/menu/': typeof MenuIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
 }
 export interface FileRoutesByTo {
@@ -145,15 +176,19 @@ export interface FileRoutesByTo {
   '/ar': typeof ArRoute
   '/cake-builder': typeof CakeBuilderRoute
   '/catering': typeof CateringRoute
+  '/mcp': typeof McpRoute
   '/order': typeof OrderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
   '/cakes': typeof CakesIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/menu': typeof MenuIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
 }
 export interface FileRoutesById {
@@ -165,16 +200,20 @@ export interface FileRoutesById {
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
   '/locations': typeof LocationsRouteWithChildren
+  '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
   '/cakes/': typeof CakesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/menu/': typeof MenuIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
 }
 export interface FileRouteTypes {
@@ -187,16 +226,20 @@ export interface FileRouteTypes {
     | '/cakes'
     | '/catering'
     | '/locations'
+    | '/mcp'
     | '/menu'
     | '/order'
     | '/sitemap.xml'
     | '/table-planner'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
     | '/cakes/'
     | '/locations/'
     | '/menu/'
+    | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -205,15 +248,19 @@ export interface FileRouteTypes {
     | '/ar'
     | '/cake-builder'
     | '/catering'
+    | '/mcp'
     | '/order'
     | '/sitemap.xml'
     | '/table-planner'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
     | '/cakes'
     | '/locations'
     | '/menu'
+    | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
   id:
     | '__root__'
@@ -224,16 +271,20 @@ export interface FileRouteTypes {
     | '/cakes'
     | '/catering'
     | '/locations'
+    | '/mcp'
     | '/menu'
     | '/order'
     | '/sitemap.xml'
     | '/table-planner'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
     | '/cakes/'
     | '/locations/'
     | '/menu/'
+    | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -245,10 +296,14 @@ export interface RootRouteChildren {
   CakesRoute: typeof CakesRouteWithChildren
   CateringRoute: typeof CateringRoute
   LocationsRoute: typeof LocationsRouteWithChildren
+  McpRoute: typeof McpRoute
   MenuRoute: typeof MenuRouteWithChildren
   OrderRoute: typeof OrderRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TablePlannerRoute: typeof TablePlannerRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -279,6 +334,13 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/menu'
       preLoaderRoute: typeof MenuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/locations': {
@@ -372,12 +434,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CakesSlugRouteImport
       parentRoute: typeof CakesRoute
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/menu/$category/$slug': {
       id: '/menu/$category/$slug'
       path: '/$slug'
       fullPath: '/menu/$category/$slug'
       preLoaderRoute: typeof MenuCategorySlugRouteImport
       parentRoute: typeof MenuCategoryRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -440,11 +523,26 @@ const rootRouteChildren: RootRouteChildren = {
   CakesRoute: CakesRouteWithChildren,
   CateringRoute: CateringRoute,
   LocationsRoute: LocationsRouteWithChildren,
+  McpRoute: McpRoute,
   MenuRoute: MenuRouteWithChildren,
   OrderRoute: OrderRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TablePlannerRoute: TablePlannerRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

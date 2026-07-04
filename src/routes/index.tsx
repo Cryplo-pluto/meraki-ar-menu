@@ -15,7 +15,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
-  const { signatures, branches } = Route.useLoaderData();
+  const data = Route.useLoaderData() as { signatures: MenuItem[]; branches: Branch[] };
+  const { signatures, branches } = data;
   return (
     <>
       {/* HERO */}

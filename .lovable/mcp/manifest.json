@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "meraki-cafe-mcp",
+      "version": "0.1.0",
+      "title": "Meraki Cafe MCP"
+    },
+    "tools": [
+      {
+        "name": "list_menu_items",
+        "title": "List menu items",
+        "description": "List Meraki Cafe menu items, optionally filtered by category (e.g. breakfast, mains, cakes). Returns name, slug, category, price in kwacha, description, dimensions label, and availability.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "category": {
+              "description": "Optional category slug to filter by.",
+              "type": "string"
+            },
+            "signature_only": {
+              "description": "If true, only return signature dishes.",
+              "type": "boolean"
+            },
+            "limit": {
+              "description": "Maximum number of items to return (default 50).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_menu_item",
+        "title": "Get menu item",
+        "description": "Fetch full details for a single Meraki Cafe menu item by slug, including AR model URLs, dimensions, allergens, and branch availability.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Menu item slug, e.g. 'butter-chicken'."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_cakes",
+        "title": "List cakes",
+        "description": "List Meraki Cakery cakes with name, slug, price in kwacha, description, and dimensions.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "limit": {
+              "description": "Maximum number of cakes to return (default 50).",
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_branches",
+        "title": "List branches",
+        "description": "List Meraki Cafe branches in Lusaka with address, phone, opening hours, and coordinates.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

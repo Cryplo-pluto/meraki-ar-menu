@@ -11,8 +11,8 @@
 function readEnv(name: string): string {
   // browser
   try {
-    // @ts-expect-error - vite import.meta.env
-    const v = import.meta?.env?.[name];
+    const meta = import.meta as unknown as { env?: Record<string, string | undefined> };
+    const v = meta?.env?.[name];
     if (typeof v === "string" && v.length > 0) return v;
   } catch {
     /* ignore */

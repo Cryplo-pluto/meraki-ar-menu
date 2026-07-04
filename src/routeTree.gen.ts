@@ -15,6 +15,7 @@ import { Route as OrderRouteImport } from './routes/order'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LocationsRouteImport } from './routes/locations'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as CakesRouteImport } from './routes/cakes'
 import { Route as CakeBuilderRouteImport } from './routes/cake-builder'
@@ -60,6 +61,11 @@ const McpRoute = McpRouteImport.update({
 const LocationsRoute = LocationsRouteImport.update({
   id: '/locations',
   path: '/locations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringRoute = CateringRouteImport.update({
@@ -153,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/cake-builder': typeof CakeBuilderRoute
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
   '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
@@ -176,6 +183,7 @@ export interface FileRoutesByTo {
   '/ar': typeof ArRoute
   '/cake-builder': typeof CakeBuilderRoute
   '/catering': typeof CateringRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/order': typeof OrderRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
@@ -199,6 +207,7 @@ export interface FileRoutesById {
   '/cake-builder': typeof CakeBuilderRoute
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
   '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
@@ -225,6 +234,7 @@ export interface FileRouteTypes {
     | '/cake-builder'
     | '/cakes'
     | '/catering'
+    | '/llms.txt'
     | '/locations'
     | '/mcp'
     | '/menu'
@@ -248,6 +258,7 @@ export interface FileRouteTypes {
     | '/ar'
     | '/cake-builder'
     | '/catering'
+    | '/llms.txt'
     | '/mcp'
     | '/order'
     | '/sitemap.xml'
@@ -270,6 +281,7 @@ export interface FileRouteTypes {
     | '/cake-builder'
     | '/cakes'
     | '/catering'
+    | '/llms.txt'
     | '/locations'
     | '/mcp'
     | '/menu'
@@ -295,6 +307,7 @@ export interface RootRouteChildren {
   CakeBuilderRoute: typeof CakeBuilderRoute
   CakesRoute: typeof CakesRouteWithChildren
   CateringRoute: typeof CateringRoute
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   LocationsRoute: typeof LocationsRouteWithChildren
   McpRoute: typeof McpRoute
   MenuRoute: typeof MenuRouteWithChildren
@@ -348,6 +361,13 @@ declare module '@tanstack/react-router' {
       path: '/locations'
       fullPath: '/locations'
       preLoaderRoute: typeof LocationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering': {
@@ -522,6 +542,7 @@ const rootRouteChildren: RootRouteChildren = {
   CakeBuilderRoute: CakeBuilderRoute,
   CakesRoute: CakesRouteWithChildren,
   CateringRoute: CateringRoute,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   LocationsRoute: LocationsRouteWithChildren,
   McpRoute: McpRoute,
   MenuRoute: MenuRouteWithChildren,

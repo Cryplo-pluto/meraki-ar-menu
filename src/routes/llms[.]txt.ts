@@ -43,8 +43,12 @@ export const Route = createFileRoute("/llms.txt")({
         }
 
         // Menu categories present.
-        const cats = new Set(items.map((i) => i.category));
-        const orderedCats = [...CATEGORY_ORDER.filter((c) => cats.has(c)), ...[...cats].filter((c) => !CATEGORY_ORDER.includes(c))];
+        const cats = new Set<string>(items.map((i) => i.category));
+        const known = new Set<string>(CATEGORY_ORDER);
+        const orderedCats: string[] = [
+          ...CATEGORY_ORDER.filter((c) => cats.has(c)),
+          ...[...cats].filter((c) => !known.has(c)),
+        ];
         if (orderedCats.length > 0) {
           lines.push("## Menu categories");
           for (const c of orderedCats) lines.push(`- ${categoryLabel(c)}`);

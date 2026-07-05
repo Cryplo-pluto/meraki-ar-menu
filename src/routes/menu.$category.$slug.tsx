@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { getItemBySlug, type MenuItem } from "@/lib/menu.functions";
 import { formatKwacha, categoryLabel } from "@/lib/format";
 import { ArViewer } from "@/components/ArViewer";
+import { InteractiveModelCard } from "@/components/InteractiveModelCard";
 import { z } from "zod";
 
 const searchSchema = z.object({ ar: z.union([z.literal(1), z.string()]).optional() });
@@ -62,9 +63,14 @@ function ItemPage() {
 
       <div className="grid gap-10 lg:grid-cols-2">
         <div>
-          <div className="aspect-[4/3] overflow-hidden rounded-2xl bg-muted warm-shadow">
-            <img src={item.image_url} alt={item.image_alt || item.name} className="h-full w-full object-cover" />
-          </div>
+          <InteractiveModelCard
+            photoUrl={item.image_url}
+            photoAlt={item.image_alt || item.name}
+            glbUrl={item.effective_glb_url}
+            usdzUrl={item.effective_usdz_url}
+            itemName={item.name}
+            defaultMode={item.is_hero ? "3d" : "photo"}
+          />
           <div id="ar" className="mt-6 aspect-[4/3] scroll-mt-24">
             <ArViewer
               glbUrl={item.effective_glb_url}

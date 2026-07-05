@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TablePlannerRouteImport } from './routes/table-planner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PitchRouteImport } from './routes/pitch'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as CreditsRouteImport } from './routes/credits'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as CakesRouteImport } from './routes/cakes'
 import { Route as CakeBuilderRouteImport } from './routes/cake-builder'
@@ -43,6 +45,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PitchRoute = PitchRouteImport.update({
+  id: '/pitch',
+  path: '/pitch',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OrderRoute = OrderRouteImport.update({
   id: '/order',
   path: '/order',
@@ -66,6 +73,11 @@ const LocationsRoute = LocationsRouteImport.update({
 const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   id: '/llms.txt',
   path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreditsRoute = CreditsRouteImport.update({
+  id: '/credits',
+  path: '/credits',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringRoute = CateringRouteImport.update({
@@ -159,11 +171,13 @@ export interface FileRoutesByFullPath {
   '/cake-builder': typeof CakeBuilderRoute
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
+  '/credits': typeof CreditsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
   '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
+  '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -183,9 +197,11 @@ export interface FileRoutesByTo {
   '/ar': typeof ArRoute
   '/cake-builder': typeof CakeBuilderRoute
   '/catering': typeof CateringRoute
+  '/credits': typeof CreditsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/order': typeof OrderRoute
+  '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -207,11 +223,13 @@ export interface FileRoutesById {
   '/cake-builder': typeof CakeBuilderRoute
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
+  '/credits': typeof CreditsRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
   '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
+  '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -234,11 +252,13 @@ export interface FileRouteTypes {
     | '/cake-builder'
     | '/cakes'
     | '/catering'
+    | '/credits'
     | '/llms.txt'
     | '/locations'
     | '/mcp'
     | '/menu'
     | '/order'
+    | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
     | '/.mcp/list-tools'
@@ -258,9 +278,11 @@ export interface FileRouteTypes {
     | '/ar'
     | '/cake-builder'
     | '/catering'
+    | '/credits'
     | '/llms.txt'
     | '/mcp'
     | '/order'
+    | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
     | '/.mcp/list-tools'
@@ -281,11 +303,13 @@ export interface FileRouteTypes {
     | '/cake-builder'
     | '/cakes'
     | '/catering'
+    | '/credits'
     | '/llms.txt'
     | '/locations'
     | '/mcp'
     | '/menu'
     | '/order'
+    | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
     | '/.mcp/list-tools'
@@ -307,11 +331,13 @@ export interface RootRouteChildren {
   CakeBuilderRoute: typeof CakeBuilderRoute
   CakesRoute: typeof CakesRouteWithChildren
   CateringRoute: typeof CateringRoute
+  CreditsRoute: typeof CreditsRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   LocationsRoute: typeof LocationsRouteWithChildren
   McpRoute: typeof McpRoute
   MenuRoute: typeof MenuRouteWithChildren
   OrderRoute: typeof OrderRoute
+  PitchRoute: typeof PitchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TablePlannerRoute: typeof TablePlannerRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -333,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pitch': {
+      id: '/pitch'
+      path: '/pitch'
+      fullPath: '/pitch'
+      preLoaderRoute: typeof PitchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order': {
@@ -368,6 +401,13 @@ declare module '@tanstack/react-router' {
       path: '/llms.txt'
       fullPath: '/llms.txt'
       preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/credits': {
+      id: '/credits'
+      path: '/credits'
+      fullPath: '/credits'
+      preLoaderRoute: typeof CreditsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering': {
@@ -542,11 +582,13 @@ const rootRouteChildren: RootRouteChildren = {
   CakeBuilderRoute: CakeBuilderRoute,
   CakesRoute: CakesRouteWithChildren,
   CateringRoute: CateringRoute,
+  CreditsRoute: CreditsRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   LocationsRoute: LocationsRouteWithChildren,
   McpRoute: McpRoute,
   MenuRoute: MenuRouteWithChildren,
   OrderRoute: OrderRoute,
+  PitchRoute: PitchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TablePlannerRoute: TablePlannerRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,

@@ -107,6 +107,7 @@ export type Database = {
           image_alt: string
           image_url: string
           is_available: boolean
+          is_hero: boolean
           is_signature: boolean
           name: string
           price_kwacha: number
@@ -131,6 +132,7 @@ export type Database = {
           image_alt?: string
           image_url?: string
           is_available?: boolean
+          is_hero?: boolean
           is_signature?: boolean
           name: string
           price_kwacha?: number
@@ -155,6 +157,7 @@ export type Database = {
           image_alt?: string
           image_url?: string
           is_available?: boolean
+          is_hero?: boolean
           is_signature?: boolean
           name?: string
           price_kwacha?: number
@@ -266,6 +269,45 @@ export type Database = {
           payment_status?: string
           status?: string
           subtotal_kwacha?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          author_first_name: string
+          body: string
+          branch_slug: string | null
+          created_at: string
+          id: string
+          is_sample: boolean
+          rating: number
+          sort_order: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          author_first_name: string
+          body: string
+          branch_slug?: string | null
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          rating?: number
+          sort_order?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          author_first_name?: string
+          body?: string
+          branch_slug?: string | null
+          created_at?: string
+          id?: string
+          is_sample?: boolean
+          rating?: number
+          sort_order?: number
+          status?: string
           updated_at?: string
         }
         Relationships: []

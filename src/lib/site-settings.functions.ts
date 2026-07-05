@@ -7,6 +7,8 @@ export type Socials = {
   website?: string;
 };
 
+export type AgencyCredit = { label: string; url: string } | null;
+
 export type SiteSettings = {
   hero_image_url: string;
   cakes_teaser_image_url: string;
@@ -14,6 +16,7 @@ export type SiteSettings = {
   story_md: string;
   socials: Socials;
   confirmed_hours: Record<string, string>;
+  agency_credit: AgencyCredit;
 };
 
 const DEFAULTS: SiteSettings = {
@@ -23,6 +26,7 @@ const DEFAULTS: SiteSettings = {
   story_md: "",
   socials: {},
   confirmed_hours: {},
+  agency_credit: null,
 };
 
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(async (): Promise<SiteSettings> => {
@@ -50,6 +54,11 @@ export const getSiteSettings = createServerFn({ method: "GET" }).handler(async (
         break;
       case "confirmed_hours":
         if (v && typeof v === "object") out.confirmed_hours = v as Record<string, string>;
+        break;
+      case "agency_credit":
+        if (v && typeof v === "object" && "label" in (v as object)) {
+          out.agency_credit = v as AgencyCredit;
+        }
         break;
     }
   }

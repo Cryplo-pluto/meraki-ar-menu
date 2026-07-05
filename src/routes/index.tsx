@@ -2,19 +2,21 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { listMenuItems, listBranches, type MenuItem, type Branch } from "@/lib/menu.functions";
 import { getSiteSettings, type SiteSettings } from "@/lib/site-settings.functions";
+import { listApprovedReviews, type Review } from "@/lib/reviews.functions";
 import { isRealAsset } from "@/lib/images";
 import { formatKwacha } from "@/lib/format";
 import { Marquee } from "@/components/Marquee";
 import { NewsletterModal } from "@/components/NewsletterModal";
 import { getQty, setQty, subscribe } from "@/lib/cart";
-import { ArrowLeft, Box, MapPin, Minus, Plus, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Box, MapPin, Minus, Plus, ShoppingBag, Star } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async (): Promise<{ items: MenuItem[]; branches: Branch[]; settings: SiteSettings }> => ({
+  loader: async (): Promise<{ items: MenuItem[]; branches: Branch[]; settings: SiteSettings; reviews: Review[] }> => ({
     items: await listMenuItems(),
     branches: await listBranches(),
     settings: await getSiteSettings(),
+    reviews: await listApprovedReviews(),
   }),
   head: () => ({
     meta: [
@@ -59,8 +61,8 @@ function labelFor(slug: string) {
 }
 
 function Home() {
-  const data = Route.useLoaderData() as { items: MenuItem[]; branches: Branch[]; settings: SiteSettings };
-  const { items, branches, settings } = data;
+  const data = Route.useLoaderData() as { items: MenuItem[]; branches: Branch[]; settings: SiteSettings; reviews: Review[] };
+  const { items, branches, settings, reviews } = data;
   const heroImg = isRealAsset(settings.hero_image_url) ? settings.hero_image_url : "";
   const story = settings.story_md.trim();
 
@@ -97,6 +99,8 @@ function Home() {
         setActiveCat={setActiveCat}
         activeList={activeList}
       />
+
+      {reviews.length > 0 && <ReviewsStrip reviews={reviews} />}
 
       {/* LOCATIONS STRIP */}
       <section className="border-t border-[var(--charcoal)]/10 bg-[var(--mint-tint)]">
@@ -142,6 +146,46 @@ function Home() {
 /* ---------- HERO ---------- */
 
 function Hero({ heroImg }: { heroImg: string }) {
+  return HeroImpl({ heroImg });
+}
+
+function ReviewsStrip({ reviews }: { reviews: Review[] }) {
+  return (
+    <section className="bg-[var(--cream)] py-20">
+      <div className="container-page">
+        <div className="text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">
+            What people say
+          </p>
+          <h2 className="mt-3 font-display text-4xl md:text-5xl">Loved in Lusaka</h2>
+        </div>
+        <ul className="mt-10 grid gap-6 md:grid-cols-3">
+          {reviews.slice(0, 3).map((r) => (
+            <li
+              key={r.id}
+              className="rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-6 warm-shadow"
+            >
+              <div className="flex items-center gap-1 text-[var(--mint)]">
+                {Array.from({ length: r.rating }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-current" aria-hidden="true" />
+                ))}
+              </div>
+              <p className="mt-4 text-[15px] leading-relaxed text-[var(--charcoal)]">
+                &ldquo;{r.body}&rdquo;
+              </p>
+              <p className="mt-4 text-xs font-bold uppercase tracking-widest text-[color:var(--muted-foreground)]">
+                {r.author_first_name}
+                {r.branch_slug ? ` · ${r.branch_slug}` : ""}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function HeroImpl({ heroImg }: { heroImg: string }) {
   const words = ["EXPERIENCE", "SIMPLE.", "FRESH.", "DELICIOUS."];
   return (
     <section className="relative overflow-hidden bg-[var(--mint-tint)]">

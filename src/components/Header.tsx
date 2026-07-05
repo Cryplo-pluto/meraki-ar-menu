@@ -47,7 +47,7 @@ function Wordmark() {
         className="grid h-11 w-11 place-items-center rounded-full bg-[var(--mint)] text-[var(--charcoal)]"
         aria-hidden="true"
       >
-        <span className="font-[var(--font-script)] text-2xl leading-none">m</span>
+        <span style={{ fontFamily: "var(--font-script)" }} className="text-2xl leading-none">m</span>
       </span>
       <span className="flex flex-col leading-none">
         <span className="font-display text-2xl tracking-tight text-[var(--charcoal)]">MERAKI</span>

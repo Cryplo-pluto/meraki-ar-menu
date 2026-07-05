@@ -1,11 +1,10 @@
 /**
- * Real-asset guard. Only images we host ourselves count for public rendering.
- *   - Our own Supabase storage public path (VITE_SUPABASE_URL/storage/v1/object/public/*)
- *   - Our own /images/meraki/* static assets
+ * Real-asset guard.
  *
- * Works on both server (process.env.SUPABASE_URL) and client
- * (import.meta.env.VITE_SUPABASE_URL) so the same predicate can filter server-side
- * lists AND gate <img> renders in components.
+ * Production (owner uploads their own photos): only our own hosted assets pass.
+ * Demo mode: curated free-stock hosts (Unsplash, Pexels) also pass, so the
+ * menu looks complete in the pitch build. Every URL is still checked against
+ * a small allowlist of hosts so we never render arbitrary third-party URLs.
  */
 
 function readEnv(name: string): string {
@@ -38,7 +37,27 @@ export function isRealAsset(url: string | null | undefined): boolean {
   if (trimmed.startsWith("/images/meraki/")) return true;
   const base = getStorageBase();
   if (base && trimmed.startsWith(base)) return true;
+  if (isDemoStockUrl(trimmed)) return true;
   return false;
+}
+
+/**
+ * Demo-mode stock hosts. Kept narrow: Unsplash and Pexels only, over HTTPS.
+ * Both provide royalty-free imagery suitable for the pitch build.
+ */
+const DEMO_STOCK_HOSTS = new Set([
+  "images.unsplash.com",
+  "plus.unsplash.com",
+  "images.pexels.com",
+]);
+
+export function isDemoStockUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return u.protocol === "https:" && DEMO_STOCK_HOSTS.has(u.hostname);
+  } catch {
+    return false;
+  }
 }
 
 /** True only if the setting resolves to a URL we host ourselves. */

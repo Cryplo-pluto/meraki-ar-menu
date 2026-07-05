@@ -110,7 +110,8 @@ function BranchPage() {
               width="100%"
               height="420"
               loading="lazy"
-              src={`https://www.openstreetmap.org/export/embed.html?bbox=${branch.lng - 0.01},${branch.lat - 0.01},${branch.lng + 0.01},${branch.lat + 0.01}&layer=mapnik&marker=${branch.lat},${branch.lng}`}
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://www.google.com/maps?q=${encodeURIComponent(`Meraki Cafe ${branch.name.replace(/^Meraki\s+/i, "")} Lusaka`)}&z=16&output=embed`}
             />
           </div>
         )}

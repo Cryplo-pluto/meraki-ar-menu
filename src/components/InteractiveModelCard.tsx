@@ -85,13 +85,14 @@ export function InteractiveModelCard({
             poster={photoUrl}
             alt={`Interactive 3D preview of ${itemName}`}
             camera-controls
-            touch-action="pan-y"
+            touch-action="none"
             auto-rotate
             auto-rotate-delay="0"
             rotation-per-second="18deg"
-            interaction-prompt="none"
+            interaction-prompt="auto"
+            disable-zoom={false}
             reveal={mvReady ? "auto" : "manual"}
-            style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
+            style={{ width: "100%", height: "100%", backgroundColor: "transparent", touchAction: "none", cursor: "grab" }}
           >
             <div slot="poster" className="h-full w-full">
               <img src={photoUrl} alt="" className="h-full w-full object-cover" />

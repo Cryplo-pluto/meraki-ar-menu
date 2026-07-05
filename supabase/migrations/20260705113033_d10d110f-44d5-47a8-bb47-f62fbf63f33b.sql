@@ -1,0 +1,3 @@
+UPDATE branches SET phone = '+260 97 8063799', address = 'Rhodes Park, Lusaka', lat = -15.4033, lng = 28.3105 WHERE slug = 'rhodespark';
+UPDATE branches SET phone = '+260 97 5948210', address = 'East Park Mall, Great East Road, Lusaka', lat = -15.3928, lng = 28.3272 WHERE slug = 'eastpark';
+UPDATE branches SET phone = '+260 76 4170860', address = 'Kabulonga Road, Lusaka', lat = -15.4293, lng = 28.3269 WHERE slug = 'kabulonga';

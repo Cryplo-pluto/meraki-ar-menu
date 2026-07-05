@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TablePlannerRouteImport } from './routes/table-planner'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as PitchRouteImport } from './routes/pitch'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as McpRouteImport } from './routes/mcp'
@@ -42,6 +43,11 @@ const TablePlannerRoute = TablePlannerRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PitchRoute = PitchRouteImport.update({
+  id: '/pitch',
+  path: '/pitch',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrderRoute = OrderRouteImport.update({
@@ -171,6 +177,7 @@ export interface FileRoutesByFullPath {
   '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
+  '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -194,6 +201,7 @@ export interface FileRoutesByTo {
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/order': typeof OrderRoute
+  '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -221,6 +229,7 @@ export interface FileRoutesById {
   '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
+  '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
@@ -249,6 +258,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/menu'
     | '/order'
+    | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
     | '/.mcp/list-tools'
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/llms.txt'
     | '/mcp'
     | '/order'
+    | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
     | '/.mcp/list-tools'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/mcp'
     | '/menu'
     | '/order'
+    | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
     | '/.mcp/list-tools'
@@ -325,6 +337,7 @@ export interface RootRouteChildren {
   McpRoute: typeof McpRoute
   MenuRoute: typeof MenuRouteWithChildren
   OrderRoute: typeof OrderRoute
+  PitchRoute: typeof PitchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TablePlannerRoute: typeof TablePlannerRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pitch': {
+      id: '/pitch'
+      path: '/pitch'
+      fullPath: '/pitch'
+      preLoaderRoute: typeof PitchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/order': {
@@ -568,6 +588,7 @@ const rootRouteChildren: RootRouteChildren = {
   McpRoute: McpRoute,
   MenuRoute: MenuRouteWithChildren,
   OrderRoute: OrderRoute,
+  PitchRoute: PitchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TablePlannerRoute: TablePlannerRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,

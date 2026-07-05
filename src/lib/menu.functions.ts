@@ -18,6 +18,7 @@ export type MenuItem = {
   available_branches: string[];
   is_available: boolean;
   is_signature: boolean;
+  is_hero: boolean;
   sort_order: number;
   // Effective AR values: fall back to size_class defaults when the item has none.
   effective_glb_url: string | null;
@@ -37,7 +38,7 @@ export type Branch = {
 };
 
 const ITEM_COLS =
-  "id,slug,name,category,description,price_kwacha,image_url,image_alt,allergens,dimensions_label,glb_url,usdz_url,available_branches,is_available,is_signature,sort_order,size_classes(reference_glb_url,reference_usdz_url,dimensions_label)";
+  "id,slug,name,category,description,price_kwacha,image_url,image_alt,allergens,dimensions_label,glb_url,usdz_url,available_branches,is_available,is_signature,is_hero,sort_order,size_classes(reference_glb_url,reference_usdz_url,dimensions_label)";
 
 type RawItem = Omit<MenuItem, "effective_glb_url" | "effective_usdz_url" | "effective_dimensions_label"> & {
   size_classes?: {
@@ -66,6 +67,7 @@ function shape(rows: RawItem[] | null): MenuItem[] {
       available_branches: r.available_branches,
       is_available: r.is_available,
       is_signature: r.is_signature,
+      is_hero: r.is_hero ?? false,
       sort_order: r.sort_order,
       effective_glb_url: r.glb_url ?? sc?.reference_glb_url ?? null,
       effective_usdz_url: r.usdz_url ?? sc?.reference_usdz_url ?? null,

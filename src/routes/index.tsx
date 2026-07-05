@@ -146,6 +146,46 @@ function Home() {
 /* ---------- HERO ---------- */
 
 function Hero({ heroImg }: { heroImg: string }) {
+  return HeroImpl({ heroImg });
+}
+
+function ReviewsStrip({ reviews }: { reviews: Review[] }) {
+  return (
+    <section className="bg-[var(--cream)] py-20">
+      <div className="container-page">
+        <div className="text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">
+            What people say
+          </p>
+          <h2 className="mt-3 font-display text-4xl md:text-5xl">Loved in Lusaka</h2>
+        </div>
+        <ul className="mt-10 grid gap-6 md:grid-cols-3">
+          {reviews.slice(0, 3).map((r) => (
+            <li
+              key={r.id}
+              className="rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-6 warm-shadow"
+            >
+              <div className="flex items-center gap-1 text-[var(--mint)]">
+                {Array.from({ length: r.rating }).map((_, i) => (
+                  <Star key={i} className="h-4 w-4 fill-current" aria-hidden="true" />
+                ))}
+              </div>
+              <p className="mt-4 text-[15px] leading-relaxed text-[var(--charcoal)]">
+                &ldquo;{r.body}&rdquo;
+              </p>
+              <p className="mt-4 text-xs font-bold uppercase tracking-widest text-[color:var(--muted-foreground)]">
+                {r.author_first_name}
+                {r.branch_slug ? ` · ${r.branch_slug}` : ""}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function HeroImpl({ heroImg }: { heroImg: string }) {
   const words = ["EXPERIENCE", "SIMPLE.", "FRESH.", "DELICIOUS."];
   return (
     <section className="relative overflow-hidden bg-[var(--mint-tint)]">

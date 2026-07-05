@@ -55,22 +55,24 @@ function CakeBuilder() {
     setError(null);
     try {
       const notes = `CAKE BUILDER — ${size} · ${sponge} sponge · ${filling} · ${finishObj.label}${message ? ` · Message on cake: "${message}"` : ""}`;
+      const collectionNote = collectAt ? ` · Collection ${collectAt.replace("T", " ")}` : "";
       const { data, error: err } = await supabase
         .from("orders")
         .insert({
-          channel: "web",
-          order_type: "cake",
+          branch_slug: "rhodespark",
+          channel: "website",
+          fulfillment: "pickup",
           status: "pending",
+          payment_status: "pending",
           customer_name: name,
           customer_phone: phone,
-          collection_at: collectAt || null,
-          total_kwacha: total,
-          notes,
+          subtotal_kwacha: total,
+          notes: (notes + collectionNote).slice(0, 1000),
         })
-        .select("id")
+        .select("id, order_number")
         .single();
       if (err) throw err;
-      setOrderId(data.id);
+      setOrderId(data.order_number ?? data.id);
       setStep(5);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong. Please call us instead.");
@@ -199,7 +201,7 @@ function CakeBuilder() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--mint)] text-2xl text-white">✓</div>
               <h2 className="text-2xl">Order received</h2>
               <p className="text-muted-foreground">
-                Reference <span className="font-mono">{orderId.slice(0, 8)}</span>. We'll call {phone} within business hours to confirm your cake and take payment.
+                Reference <span className="font-mono">{orderId}</span>. We'll call {phone} within business hours to confirm your cake and take payment.
               </p>
               <div className="flex justify-center gap-3">
                 <Link to="/cakes" className="rounded-full border border-border px-6 py-3 text-sm font-semibold">See our cakes</Link>

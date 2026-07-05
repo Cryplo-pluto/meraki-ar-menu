@@ -2,19 +2,21 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { listMenuItems, listBranches, type MenuItem, type Branch } from "@/lib/menu.functions";
 import { getSiteSettings, type SiteSettings } from "@/lib/site-settings.functions";
+import { listApprovedReviews, type Review } from "@/lib/reviews.functions";
 import { isRealAsset } from "@/lib/images";
 import { formatKwacha } from "@/lib/format";
 import { Marquee } from "@/components/Marquee";
 import { NewsletterModal } from "@/components/NewsletterModal";
 import { getQty, setQty, subscribe } from "@/lib/cart";
-import { ArrowLeft, Box, MapPin, Minus, Plus, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Box, MapPin, Minus, Plus, ShoppingBag, Star } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async (): Promise<{ items: MenuItem[]; branches: Branch[]; settings: SiteSettings }> => ({
+  loader: async (): Promise<{ items: MenuItem[]; branches: Branch[]; settings: SiteSettings; reviews: Review[] }> => ({
     items: await listMenuItems(),
     branches: await listBranches(),
     settings: await getSiteSettings(),
+    reviews: await listApprovedReviews(),
   }),
   head: () => ({
     meta: [
@@ -59,8 +61,8 @@ function labelFor(slug: string) {
 }
 
 function Home() {
-  const data = Route.useLoaderData() as { items: MenuItem[]; branches: Branch[]; settings: SiteSettings };
-  const { items, branches, settings } = data;
+  const data = Route.useLoaderData() as { items: MenuItem[]; branches: Branch[]; settings: SiteSettings; reviews: Review[] };
+  const { items, branches, settings, reviews } = data;
   const heroImg = isRealAsset(settings.hero_image_url) ? settings.hero_image_url : "";
   const story = settings.story_md.trim();
 
@@ -97,6 +99,8 @@ function Home() {
         setActiveCat={setActiveCat}
         activeList={activeList}
       />
+
+      {reviews.length > 0 && <ReviewsStrip reviews={reviews} />}
 
       {/* LOCATIONS STRIP */}
       <section className="border-t border-[var(--charcoal)]/10 bg-[var(--mint-tint)]">

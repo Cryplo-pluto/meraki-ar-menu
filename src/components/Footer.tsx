@@ -1,5 +1,7 @@
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Facebook, Instagram } from "lucide-react";
+import { getSiteSettings, type AgencyCredit } from "@/lib/site-settings.functions";
 
 // Only real, confirmed values render. Anything missing is hidden — never a
 // placeholder phone/address (§0 Truth). Real socials linked in a new tab.
@@ -18,6 +20,20 @@ const BRANCHES: { name: string; phone?: string }[] = [
 // Rendering an empty block by default keeps the layout truthful.
 
 export function Footer() {
+  const [credit, setCredit] = useState<AgencyCredit>(null);
+  useEffect(() => {
+    let cancelled = false;
+    getSiteSettings()
+      .then((s) => {
+        if (!cancelled) setCredit(s.agency_credit);
+      })
+      .catch(() => {
+        /* silent — footer credit is non-critical */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   return (
     <footer className="mt-24 bg-[var(--charcoal)] text-[var(--cream)]">
       <div className="container-page grid gap-10 py-14 md:grid-cols-12">
@@ -110,6 +126,26 @@ export function Footer() {
           <p className="text-xs text-[var(--cream)]/70">
             © {new Date().getFullYear()} Meraki Home. All rights reserved.
           </p>
+          {credit && credit.label && (
+            <p className="text-[11px] text-[var(--cream)]/50">
+              {credit.url ? (
+                <a
+                  href={credit.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline underline-offset-4 hover:text-[var(--mint)]"
+                >
+                  {credit.label}
+                </a>
+              ) : (
+                credit.label
+              )}
+              {" · "}
+              <Link to="/credits" className="underline underline-offset-4 hover:text-[var(--mint)]">
+                image &amp; model credits
+              </Link>
+            </p>
+          )}
         </div>
       </div>
     </footer>

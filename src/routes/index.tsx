@@ -159,7 +159,7 @@ function Hero({ heroImg }: { heroImg: string }) {
         >
           <span className="pointer-events-none absolute inset-4 rounded-full border border-[var(--charcoal)]/25" />
           <div className="text-center">
-            <span className="block font-[var(--font-script)] text-6xl leading-none text-[var(--charcoal)] sm:text-7xl">
+            <span style={{ fontFamily: "var(--font-script)" }} className="block text-6xl leading-none text-[var(--charcoal)] sm:text-7xl">
               Meraki
             </span>
             <span className="mt-4 block text-[10px] font-bold uppercase tracking-[0.4em] text-[var(--charcoal)]/70">

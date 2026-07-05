@@ -46,38 +46,44 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-scrim: var(--scrim);
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-display: "Oswald", "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-script: "Caveat", "Kalam", ui-serif, cursive;
 }
 
 :root {
   --radius: 0.75rem;
-  /* Meraki warm palette */
-  --background: oklch(0.972 0.018 82);
-  --foreground: oklch(0.26 0.04 55);
-  --card: oklch(0.99 0.012 85);
-  --card-foreground: oklch(0.26 0.04 55);
-  --popover: oklch(0.99 0.012 85);
-  --popover-foreground: oklch(0.26 0.04 55);
-  --primary: oklch(0.42 0.085 145);           /* deep forest green */
-  --primary-foreground: oklch(0.98 0.015 85);
-  --secondary: oklch(0.55 0.075 55);          /* warm brown */
-  --secondary-foreground: oklch(0.98 0.015 85);
-  --muted: oklch(0.93 0.02 82);
-  --muted-foreground: oklch(0.42 0.04 55);
-  --accent: oklch(0.62 0.14 42);              /* terracotta */
-  --accent-foreground: oklch(0.99 0.012 85);
+  /* Meraki brand palette — sampled from their printed menu + site */
+  --mint: #86CBB9;
+  --mint-tint: #E5F2E8;
+  --cream: #F1F2E3;
+  --charcoal: #383832;
+  --paper: #FFFFFF;
+  --background: var(--cream);
+  --foreground: var(--charcoal);
+  --card: var(--paper);
+  --card-foreground: var(--charcoal);
+  --popover: var(--paper);
+  --popover-foreground: var(--charcoal);
+  --primary: var(--mint);                   /* CTAs, section blocks */
+  --primary-foreground: var(--charcoal);
+  --secondary: var(--charcoal);
+  --secondary-foreground: var(--cream);
+  --muted: var(--mint-tint);
+  --muted-foreground: #6a6a5f;
+  --accent: var(--charcoal);
+  --accent-foreground: var(--cream);
   --destructive: oklch(0.52 0.19 25);
-  --destructive-foreground: oklch(0.99 0.012 85);
-  --border: oklch(0.86 0.028 75);
-  --input: oklch(0.9 0.022 78);
-  --ring: oklch(0.42 0.085 145);
-  --scrim: oklch(0.2 0.03 55 / 0.55);
-  --chart-1: oklch(0.42 0.085 145);
-  --chart-2: oklch(0.62 0.14 42);
-  --chart-3: oklch(0.55 0.075 55);
-  --chart-4: oklch(0.72 0.12 85);
-  --chart-5: oklch(0.5 0.09 200);
+  --destructive-foreground: #ffffff;
+  --border: #d7d8c8;
+  --input: #e2e3d3;
+  --ring: var(--mint);
+  --scrim: rgba(56, 56, 50, 0.55);
+  --chart-1: var(--mint);
+  --chart-2: var(--charcoal);
+  --chart-3: #b7d9cd;
+  --chart-4: #d7d8c8;
+  --chart-5: #6a6a5f;
   --sidebar: oklch(0.96 0.02 82);
   --sidebar-foreground: oklch(0.26 0.04 55);
   --sidebar-primary: oklch(0.42 0.085 145);
@@ -104,7 +110,8 @@
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
     color: var(--color-foreground);
   }
 
@@ -136,4 +143,19 @@
 
 @utility warm-shadow {
   box-shadow: 0 10px 40px -20px oklch(0.3 0.06 55 / 0.35);
+}
+
+@keyframes marquee-slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@utility marquee-track {
+  animation: marquee-slide 30s linear infinite;
+}
+
+@keyframes word-rotate {
+  0%, 22%   { opacity: 0; transform: translateY(8px); }
+  6%, 20%   { opacity: 1; transform: translateY(0); }
+  25%, 100% { opacity: 0; transform: translateY(-8px); }
 }

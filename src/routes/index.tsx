@@ -1,15 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { listSignatureItems, listBranches, type MenuItem, type Branch } from "@/lib/menu.functions";
+import { useEffect, useMemo, useState } from "react";
+import { listMenuItems, listBranches, type MenuItem, type Branch } from "@/lib/menu.functions";
 import { getSiteSettings, type SiteSettings } from "@/lib/site-settings.functions";
 import { isRealAsset } from "@/lib/images";
-import { MenuCard } from "@/components/MenuCard";
-import { Section } from "@/components/Section";
-import { Box, MapPin } from "lucide-react";
+import { formatKwacha } from "@/lib/format";
+import { Marquee } from "@/components/Marquee";
+import { NewsletterModal } from "@/components/NewsletterModal";
+import { getQty, setQty, subscribe } from "@/lib/cart";
+import { ArrowLeft, Box, MapPin, Minus, Plus, ShoppingBag } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  loader: async (): Promise<{ signatures: MenuItem[]; branches: Branch[]; settings: SiteSettings }> => ({
-    signatures: await listSignatureItems(),
+  loader: async (): Promise<{ items: MenuItem[]; branches: Branch[]; settings: SiteSettings }> => ({
+    items: await listMenuItems(),
     branches: await listBranches(),
     settings: await getSiteSettings(),
   }),
@@ -27,136 +30,400 @@ export const Route = createFileRoute("/")({
   notFoundComponent: () => <p className="container-page py-24">Not found.</p>,
 });
 
+// Category display labels — canonical printed-menu wording. Only shown when
+// at least one real-photo item exists in that category.
+const CATEGORY_LABEL: Record<string, string> = {
+  "all-day-breakfast": "All Day Breakfast",
+  burgers: "Burgers",
+  sandwiches: "Sandwiches",
+  wraps: "Wraps",
+  salads: "Salads",
+  bowls: "Healthy Bowls",
+  pasta: "Pasta",
+  mains: "Mains",
+  coffee: "Coffees & Teas",
+  "iced-coffee": "Iced Coffee",
+  smoothies: "Smoothies",
+  "summer-coolers": "Summer Coolers",
+  mocktails: "Mocktails",
+  juices: "Freshly Pressed Juices",
+  milkshakes: "Milkshakes",
+  drinks: "Sodas & Water",
+  sweets: "Sweet Snacks",
+  cakes: "Cakes",
+  "pre-packs": "Pre-Packs",
+};
+
+function labelFor(slug: string) {
+  return CATEGORY_LABEL[slug] ?? slug.replace(/-/g, " ");
+}
+
 function Home() {
-  const data = Route.useLoaderData() as { signatures: MenuItem[]; branches: Branch[]; settings: SiteSettings };
-  const { signatures, branches, settings } = data;
+  const data = Route.useLoaderData() as { items: MenuItem[]; branches: Branch[]; settings: SiteSettings };
+  const { items, branches, settings } = data;
   const heroImg = isRealAsset(settings.hero_image_url) ? settings.hero_image_url : "";
-  const cakesImg = isRealAsset(settings.cakes_teaser_image_url) ? settings.cakes_teaser_image_url : "";
-  const builderImg = isRealAsset(settings.builder_teaser_image_url) ? settings.builder_teaser_image_url : "";
   const story = settings.story_md.trim();
+
+  const categories = useMemo(() => {
+    const seen = new Map<string, MenuItem[]>();
+    for (const it of items) {
+      const arr = seen.get(it.category) ?? [];
+      arr.push(it);
+      seen.set(it.category, arr);
+    }
+    return Array.from(seen.entries()).map(([slug, list]) => ({ slug, list }));
+  }, [items]);
+
+  const [activeCat, setActiveCat] = useState<string | null>(null);
+  const activeList = activeCat ? categories.find((c) => c.slug === activeCat)?.list ?? [] : [];
+
   return (
     <>
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-background via-secondary/40 to-primary/15">
-        {heroImg ? (
-          <div className="absolute inset-0 -z-10">
-            <img src={heroImg} alt="" className="h-full w-full object-cover" />
-            <div className="absolute inset-0 scrim-gradient" />
-          </div>
-        ) : (
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 -z-10 opacity-[0.18]"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='104' viewBox='0 0 90 104'><g fill='none' stroke='%23000' stroke-opacity='0.45' stroke-width='1.2'><polygon points='45,4 82,26 82,78 45,100 8,78 8,26'/><polyline points='45,4 45,52 8,26'/><polyline points='45,52 82,26'/><polyline points='45,52 45,100'/></g></svg>\")",
-              backgroundSize: "90px 104px",
-            }}
-          />
-        )}
-        <div className={`container-page flex min-h-[70dvh] flex-col justify-end py-16 md:min-h-[80dvh] ${heroImg ? "text-white" : "text-foreground"}`}>
-          <p className={`text-xs font-semibold uppercase tracking-[0.3em] ${heroImg ? "text-white/80" : "text-accent"}`}>Simple. Fresh. Delicious.</p>
-          <h1 className="mt-4 max-w-3xl font-display text-5xl leading-[1.05] md:text-7xl">
-            A home-cooked meal, away from home.
-          </h1>
-          <p className={`mt-5 max-w-2xl text-lg md:text-xl ${heroImg ? "text-white/90" : "text-foreground/80"}`}>
-            Homemade dishes, decadent cakes and honest coffee — served with love at three spots across Lusaka since 2008.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link to="/menu" className="min-h-11 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-accent-foreground warm-shadow hover:brightness-110">
-              See the menu
-            </Link>
-            <Link to="/order" className={`min-h-11 rounded-full px-6 py-3 text-sm font-semibold ${heroImg ? "border border-white/70 text-white hover:bg-white/10" : "border border-primary text-primary hover:bg-primary/5"}`}>
-              Order for delivery
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* HERO — mint circle with rotating words + ORDER NOW.
+          Photo hero swaps in when the owner uploads settings.hero_image_url. */}
+      <Hero heroImg={heroImg} />
 
-      {/* SIGNATURES */}
-      <Section
-        eyebrow="See it before you order it"
-        title="Signature dishes — try them in AR"
-        action={<Link to="/menu" className="hidden text-sm font-medium text-primary hover:underline md:inline">Full menu →</Link>}
-      >
-        {signatures.length === 0 ? (
-          <p className="rounded-2xl border border-dashed border-border/70 bg-card/60 p-8 text-center text-muted-foreground">
-            Our full menu with photos is being uploaded — check back very soon.
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {signatures.map((it) => (
-              <MenuCard key={it.id} item={it} hrefBase={`/menu/${it.category}`} />
-            ))}
-          </div>
-        )}
-      </Section>
+      <Marquee variant="solid" />
+
+      {/* STORY BAND — giant pale MERAKI watermark, since 2008. */}
+      <StoryBand story={story} />
+
+      <Marquee variant="outline" />
+
+      {/* OUR MENU — the order sheet. Category chips → row list with steppers. */}
+      <OrderSheet
+        categories={categories}
+        activeCat={activeCat}
+        setActiveCat={setActiveCat}
+        activeList={activeList}
+      />
 
       {/* LOCATIONS STRIP */}
-      <section className="border-y border-border/60 bg-secondary/10">
+      <section className="border-t border-[var(--charcoal)]/10 bg-[var(--mint-tint)]">
         <div className="container-page py-16">
-          <div className="mb-8 flex items-end justify-between">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Three spots</p>
-              <h2 className="mt-1 text-3xl md:text-4xl">Find your Meraki</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--charcoal)]/70">
+                Three spots
+              </p>
+              <h2 className="mt-1 font-display text-4xl md:text-5xl">Find your Meraki</h2>
             </div>
-            <Link to="/locations" className="hidden text-sm font-medium text-primary hover:underline md:inline">All locations →</Link>
+            <Link to="/locations" className="text-sm font-semibold uppercase tracking-wider text-[var(--charcoal)] underline underline-offset-8">
+              All locations →
+            </Link>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {branches.map((b) => (
-              <Link key={b.slug} to="/locations/$slug" params={{ slug: b.slug }} className="group rounded-2xl border border-border/60 bg-card p-6 warm-shadow transition hover:border-primary/40">
-                <MapPin className="h-5 w-5 text-accent" />
-                <h3 className="mt-3 text-xl">{b.name}</h3>
-                {b.address && <p className="mt-1 text-sm text-muted-foreground">{b.address}</p>}
-                <p className="mt-4 text-xs uppercase tracking-widest text-muted-foreground">See branch details</p>
+              <Link
+                key={b.slug}
+                to="/locations/$slug"
+                params={{ slug: b.slug }}
+                className="group rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-6 warm-shadow transition hover:border-[var(--mint)]"
+              >
+                <MapPin className="h-5 w-5 text-[var(--mint)]" aria-hidden="true" />
+                <h3 className="mt-3 font-display text-2xl">{b.name}</h3>
+                {b.address && b.address !== "Address to be confirmed" && (
+                  <p className="mt-1 text-sm text-[color:var(--muted-foreground)]">{b.address}</p>
+                )}
+                <p className="mt-4 text-xs uppercase tracking-widest text-[color:var(--muted-foreground)]">
+                  See branch details
+                </p>
               </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CAKES TEASER */}
-      <Section eyebrow="For every celebration" title="Order a cake, or build your own">
-        <div className="grid gap-6 md:grid-cols-2">
-          <Link to="/cakes" className="group relative block aspect-[16/10] overflow-hidden rounded-2xl warm-shadow bg-gradient-to-br from-accent/30 to-primary/20">
-            {cakesImg && <img src={cakesImg} alt="" className="absolute inset-0 h-full w-full object-cover transition group-hover:scale-[1.03]" />}
-            <div className="absolute inset-0 scrim-gradient" />
-            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-              <h3 className="text-2xl">Our cake gallery</h3>
-              <p className="mt-1 text-sm text-white/85">Browse and order for pickup or delivery.</p>
-            </div>
-          </Link>
-          <Link to="/cake-builder" className="group relative block aspect-[16/10] overflow-hidden rounded-2xl warm-shadow bg-gradient-to-br from-primary/25 to-accent/25">
-            {builderImg && <img src={builderImg} alt="" className="absolute inset-0 h-full w-full object-cover transition group-hover:scale-[1.03]" />}
-            <div className="absolute inset-0 scrim-gradient" />
-            <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-              <h3 className="text-2xl">Build your own cake</h3>
-              <p className="mt-1 text-sm text-white/90">Size, sponge, filling, finish — exactly how you imagined it.</p>
-            </div>
-          </Link>
-        </div>
-      </Section>
+      <NewsletterModal />
+    </>
+  );
+}
 
-      {/* STORY */}
-      <section className="container-page py-16">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Our home</p>
-          <h2 className="mt-2 text-3xl md:text-4xl">Cooked with soul, since 2008.</h2>
-          {story ? (
-            <p className="mt-5 whitespace-pre-line text-lg text-muted-foreground">{story}</p>
-          ) : (
-            <p className="mt-5 text-lg text-muted-foreground">
-              Homemade food, cakes and coffee — served across three branches in Lusaka since 2008.
-            </p>
-          )}
-          <div className="mt-8 flex justify-center gap-3">
-            <Link to="/about" className="min-h-11 rounded-full border border-primary px-6 py-3 text-sm font-semibold text-primary hover:bg-primary/5">Read our story</Link>
-            <Link to="/ar" className="min-h-11 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:brightness-110">
-              <span className="inline-flex items-center gap-2"><Box className="h-4 w-4" aria-hidden="true" /> How our AR menu works</span>
-            </Link>
+/* ---------- HERO ---------- */
+
+function Hero({ heroImg }: { heroImg: string }) {
+  const words = ["EXPERIENCE", "SIMPLE.", "FRESH.", "DELICIOUS."];
+  return (
+    <section className="relative overflow-hidden bg-[var(--mint-tint)]">
+      {heroImg && (
+        <div className="absolute inset-0 -z-10">
+          <img src={heroImg} alt="" className="h-full w-full object-cover" />
+          <div className="absolute inset-0 bg-[var(--charcoal)]/40" aria-hidden="true" />
+        </div>
+      )}
+      <div className="container-page relative flex min-h-[80dvh] flex-col items-center justify-center py-20">
+        {/* Mint circle with rotating words */}
+        <div
+          className="relative grid h-72 w-72 place-items-center rounded-full bg-[var(--mint)] warm-shadow sm:h-96 sm:w-96"
+          aria-hidden="true"
+        >
+          <span className="pointer-events-none absolute inset-4 rounded-full border border-[var(--charcoal)]/25" />
+          <div className="text-center">
+            <span className="block font-[var(--font-script)] text-6xl leading-none text-[var(--charcoal)] sm:text-7xl">
+              Meraki
+            </span>
+            <span className="mt-4 block text-[10px] font-bold uppercase tracking-[0.4em] text-[var(--charcoal)]/70">
+              Cafe · since 2008
+            </span>
+            <div className="relative mt-4 h-6 sm:h-8">
+              {words.map((w, i) => (
+                <span
+                  key={w}
+                  className="absolute inset-x-0 font-display text-lg tracking-widest text-[var(--charcoal)] sm:text-2xl"
+                  style={{
+                    animation: `word-rotate 8s ${i * 2}s infinite`,
+                    opacity: 0,
+                  }}
+                >
+                  {w}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-      </section>
-    </>
+
+        <h1 className="sr-only">
+          Meraki Cafe Lusaka — homemade food, cakes and coffee since 2008
+        </h1>
+
+        <Link
+          to="/menu"
+          className="mt-10 inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--charcoal)] px-8 py-3 text-sm font-bold uppercase tracking-widest text-[var(--cream)] hover:bg-[var(--charcoal)]/90"
+        >
+          Order now
+          <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- STORY ---------- */
+
+function StoryBand({ story }: { story: string }) {
+  return (
+    <section className="relative overflow-hidden bg-[var(--cream)] py-24">
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-6 text-center font-display text-[18vw] font-bold leading-none tracking-tighter text-[var(--charcoal)]/[0.05]"
+      >
+        MERAKI
+      </span>
+      <div className="container-page relative mx-auto max-w-3xl text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">—— Since 2008</p>
+        <h2 className="mt-4 font-display text-5xl md:text-6xl">
+          Simple. Fresh. Delicious.
+        </h2>
+        {story ? (
+          <p className="mt-6 whitespace-pre-line text-lg text-[color:var(--muted-foreground)]">
+            {story}
+          </p>
+        ) : (
+          <p className="mt-6 text-lg text-[color:var(--muted-foreground)]">
+            Welcome to Meraki — where every plate is cooked with soul and every cake is baked
+            with love. Three branches across Lusaka, one home-cooked promise.
+          </p>
+        )}
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <Link
+            to="/about"
+            className="min-h-11 rounded-full border-2 border-[var(--charcoal)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--charcoal)] hover:bg-[var(--charcoal)] hover:text-[var(--cream)]"
+          >
+            About Meraki
+          </Link>
+          <Link
+            to="/catering"
+            className="min-h-11 rounded-full bg-[var(--mint)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--charcoal)] hover:brightness-95"
+          >
+            Get a quote
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------- ORDER SHEET ---------- */
+
+type Cat = { slug: string; list: MenuItem[] };
+
+function OrderSheet({
+  categories,
+  activeCat,
+  setActiveCat,
+  activeList,
+}: {
+  categories: Cat[];
+  activeCat: string | null;
+  setActiveCat: (v: string | null) => void;
+  activeList: MenuItem[];
+}) {
+  const [cartCount, setCartCount] = useState(0);
+  useEffect(() => {
+    const bump = () => {
+      let n = 0;
+      for (const it of activeList) n += getQty(it.slug);
+      setCartCount(n);
+    };
+    bump();
+    return subscribe(bump);
+  }, [activeList]);
+
+  return (
+    <section id="menu" className="container-page py-20">
+      <div className="text-center">
+        <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">Order sheet</p>
+        <h2 className="mt-3 font-display text-4xl md:text-5xl">Our Menu</h2>
+        <p className="mx-auto mt-3 max-w-xl text-[color:var(--muted-foreground)]">
+          Explore our delicious selection of dishes and treats — every item shows in true-scale AR before you order.
+        </p>
+      </div>
+
+      {categories.length === 0 ? (
+        <div className="mx-auto mt-10 max-w-xl rounded-3xl border border-dashed border-[var(--charcoal)]/20 bg-[var(--mint-tint)]/40 p-10 text-center">
+          <p className="text-sm text-[color:var(--muted-foreground)]">
+            Our full menu with real photos is being uploaded — check back very soon.
+          </p>
+        </div>
+      ) : activeCat === null ? (
+        <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {categories.map((c) => (
+            <button
+              key={c.slug}
+              type="button"
+              onClick={() => setActiveCat(c.slug)}
+              className="group rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-5 text-left transition hover:border-[var(--mint)] hover:bg-[var(--mint-tint)]"
+            >
+              <span className="block text-xs font-semibold uppercase tracking-widest text-[var(--mint)]">
+                {c.list.length} item{c.list.length === 1 ? "" : "s"}
+              </span>
+              <span className="mt-2 block font-display text-xl text-[var(--charcoal)] group-hover:text-[var(--charcoal)]">
+                {labelFor(c.slug)}
+              </span>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="mt-8 rounded-3xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-4 md:p-6">
+          <div className="flex items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => setActiveCat(null)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-[var(--charcoal)] hover:bg-[var(--mint-tint)]"
+              aria-label="Back to categories"
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              Back
+            </button>
+            <h3 className="font-display text-2xl md:text-3xl">{labelFor(activeCat)}</h3>
+            <Link
+              to="/order"
+              className={`inline-flex min-h-11 items-center gap-2 rounded-full bg-[var(--mint)] px-4 py-2 text-xs font-bold uppercase tracking-widest text-[var(--charcoal)] hover:brightness-95 ${cartCount === 0 ? "opacity-60" : ""}`}
+            >
+              <ShoppingBag className="h-4 w-4" aria-hidden="true" />
+              Checkout
+            </Link>
+          </div>
+
+          <ul className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {activeList.map((it) => (
+              <OrderRow key={it.slug} item={it} />
+            ))}
+          </ul>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function OrderRow({ item }: { item: MenuItem }) {
+  const [qty, setQtyState] = useState(0);
+  useEffect(() => {
+    setQtyState(getQty(item.slug));
+    return subscribe(() => setQtyState(getQty(item.slug)));
+  }, [item.slug]);
+
+  const detailHref = `/menu/${item.category}/${item.slug}`;
+  const arHref = `${detailHref}?ar=1`;
+
+  return (
+    <li className="flex flex-col gap-3 rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--cream)]/40 p-3">
+      <div className="flex items-start gap-3">
+        <Link
+          to="/menu/$category/$slug"
+          params={{ category: item.category, slug: item.slug }}
+          className="block h-20 w-20 shrink-0 overflow-hidden rounded-full bg-[var(--mint-tint)]"
+          aria-label={`View ${item.name}`}
+        >
+          <img
+            src={item.image_url}
+            alt={item.image_alt || item.name}
+            className="h-full w-full object-cover"
+            loading="lazy"
+          />
+        </Link>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-2">
+            <Link
+              to="/menu/$category/$slug"
+              params={{ category: item.category, slug: item.slug }}
+              className="truncate font-display text-lg leading-tight text-[var(--charcoal)] hover:underline"
+            >
+              {item.name}
+            </Link>
+            <span className="shrink-0 font-display text-lg text-[var(--charcoal)]">
+              {formatKwacha(item.price_kwacha)}
+            </span>
+          </div>
+          {item.description && (
+            <p className="mt-1 line-clamp-2 text-xs text-[color:var(--muted-foreground)]">
+              {item.description}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* View in AR — required under EVERY food image (§6) */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <a
+          href={arHref}
+          className="inline-flex min-h-11 items-center gap-2 rounded-full border-2 border-[var(--charcoal)] px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-[var(--charcoal)] hover:bg-[var(--charcoal)] hover:text-[var(--cream)]"
+          aria-label={`View ${item.name} in augmented reality on your table`}
+        >
+          <Box className="h-3.5 w-3.5" aria-hidden="true" />
+          View in AR
+        </a>
+
+        <div
+          className="flex items-center gap-1 rounded-full bg-[var(--paper)] p-1 warm-shadow"
+          role="group"
+          aria-label={`Quantity of ${item.name}`}
+        >
+          <button
+            type="button"
+            onClick={() => setQty(item, qty - 1)}
+            disabled={qty === 0}
+            className="grid h-9 w-9 place-items-center rounded-full text-[var(--charcoal)] hover:bg-[var(--mint-tint)] disabled:opacity-40"
+            aria-label={`Remove one ${item.name}`}
+          >
+            <Minus className="h-4 w-4" aria-hidden="true" />
+          </button>
+          <span
+            className="min-w-6 text-center text-sm font-bold tabular-nums text-[var(--charcoal)]"
+            aria-live="polite"
+          >
+            {qty}
+          </span>
+          <button
+            type="button"
+            onClick={() => setQty(item, qty + 1)}
+            className="grid h-9 w-9 place-items-center rounded-full bg-[var(--mint)] text-[var(--charcoal)] hover:brightness-95"
+            aria-label={`Add one ${item.name}`}
+          >
+            <Plus className="h-4 w-4" aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+    </li>
   );
 }

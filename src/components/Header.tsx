@@ -38,23 +38,8 @@ function CartBadge() {
 
 function Wordmark() {
   return (
-    <Link
-      to="/"
-      className="flex items-center gap-3"
-      aria-label="Meraki Cafe home"
-    >
-      <span
-        className="grid h-11 w-11 place-items-center rounded-full bg-[var(--mint)] text-[var(--charcoal)]"
-        aria-hidden="true"
-      >
-        <span style={{ fontFamily: "var(--font-script)" }} className="text-2xl leading-none">m</span>
-      </span>
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-2xl tracking-tight text-[var(--charcoal)]">MERAKI</span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[color:var(--muted-foreground)]">
-          Cafe · Lusaka
-        </span>
-      </span>
+    <Link to="/" className="flex items-center" aria-label="Meraki Cafe home">
+      <img src="/images/meraki/logo.png" alt="Meraki" className="h-11 w-auto" />
     </Link>
   );
 }
@@ -65,10 +50,7 @@ export function Header() {
     <header className="sticky top-0 z-40 border-b border-[var(--charcoal)]/10 bg-[var(--cream)]/95 backdrop-blur">
       <div className="container-page grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4 py-3 lg:grid-cols-[auto_1fr_auto]">
         <Wordmark />
-        <nav
-          className="hidden lg:flex items-center justify-center gap-7"
-          aria-label="Primary"
-        >
+        <nav className="hidden lg:flex items-center justify-center gap-7" aria-label="Primary">
           {NAV.map((n) => (
             <Link
               key={n.to}

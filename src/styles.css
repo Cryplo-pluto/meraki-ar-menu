@@ -46,19 +46,25 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-scrim: var(--scrim);
-  --font-display: "Oswald", "Bebas Neue", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Oswald", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-script: "Caveat", "Kalam", ui-serif, cursive;
+  --font-script: "Caveat", cursive;
 }
 
 :root {
   --radius: 0.75rem;
-  /* Meraki brand palette — sampled from their printed menu + site */
-  --mint: #86CBB9;
+  /* Meraki brand palette — sampled directly from meraki.co.zm's own restaurant.css :root */
+  --mint: #89CCB4;
   --mint-tint: #E5F2E8;
-  --cream: #F1F2E3;
-  --charcoal: #383832;
+  --cream: #f9f6f3;
+  --charcoal: #383632;
   --paper: #FFFFFF;
+  --brand-black: #282725;
+  --brand-medium-gray: #8d8987;
+  --brand-red: #d51f0f;
+  --brand-yellow: #ECBA23;
+  --brand-green: #46b57e;
+  --brand-cedar: #8B5A2B;
   --background: var(--cream);
   --foreground: var(--charcoal);
   --card: var(--paper);
@@ -109,9 +115,9 @@
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     color: var(--color-foreground);
   }
 
@@ -151,7 +157,9 @@
 }
 
 @utility marquee-track {
-  animation: marquee-slide 30s linear infinite;
+  /* Duration scaled up with the repeat count in Marquee.tsx so the on-screen
+     scroll speed stays the same, not faster. */
+  animation: marquee-slide 120s linear infinite;
 }
 
 @keyframes word-rotate {

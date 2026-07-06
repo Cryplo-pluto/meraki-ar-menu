@@ -6,6 +6,7 @@ export type CartLine = {
   slug: string;
   name: string;
   price_kwacha: number;
+  image_url: string;
   qty: number;
 };
 
@@ -21,8 +22,12 @@ function safeRead(): CartLine[] {
     if (!Array.isArray(parsed)) return [];
     return parsed.filter(
       (l): l is CartLine =>
-        l && typeof l.slug === "string" && typeof l.name === "string" &&
-        typeof l.price_kwacha === "number" && typeof l.qty === "number",
+        l &&
+        typeof l.slug === "string" &&
+        typeof l.name === "string" &&
+        typeof l.price_kwacha === "number" &&
+        typeof l.image_url === "string" &&
+        typeof l.qty === "number",
     );
   } catch {
     return [];
@@ -39,7 +44,10 @@ export function getCart(): CartLine[] {
   return safeRead();
 }
 
-export function setQty(item: { slug: string; name: string; price_kwacha: number }, qty: number) {
+export function setQty(
+  item: { slug: string; name: string; price_kwacha: number; image_url: string },
+  qty: number,
+) {
   const bounded = Math.max(0, Math.min(50, Math.floor(qty)));
   const lines = safeRead();
   const idx = lines.findIndex((l) => l.slug === item.slug);
@@ -48,9 +56,19 @@ export function setQty(item: { slug: string; name: string; price_kwacha: number 
   } else if (idx >= 0) {
     lines[idx] = { ...lines[idx], qty: bounded };
   } else {
-    lines.push({ slug: item.slug, name: item.name, price_kwacha: item.price_kwacha, qty: bounded });
+    lines.push({
+      slug: item.slug,
+      name: item.name,
+      price_kwacha: item.price_kwacha,
+      image_url: item.image_url,
+      qty: bounded,
+    });
   }
   safeWrite(lines);
+}
+
+export function clearCart() {
+  safeWrite([]);
 }
 
 export function getQty(slug: string): number {

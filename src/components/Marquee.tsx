@@ -18,7 +18,10 @@ export function Marquee({
   const item = solid
     ? "text-[var(--charcoal)]"
     : "[-webkit-text-stroke:1.5px_var(--mint)] text-transparent";
-  const line = [...words, ...words, ...words, ...words];
+  // Repeated well past any realistic viewport width (even ultrawide desktop)
+  // so the -50% loop point always lands mid-pattern — no empty gap, no
+  // visible "restart" moment, just a continuous scroll.
+  const line = Array.from({ length: 16 }, () => words).flat();
   return (
     <div
       className={`overflow-hidden ${bg} border-y border-[var(--charcoal)]/10 py-4 ${className}`}

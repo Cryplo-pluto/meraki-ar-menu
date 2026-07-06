@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Box, Camera } from "lucide-react";
+import { SafeImage } from "./SafeImage";
 
 // Lazy-load model-viewer once on demand.
 let mvLoaded = false;
@@ -16,6 +17,7 @@ type Props = {
   usdzUrl?: string | null;
   itemName: string;
   defaultMode?: "photo" | "3d";
+  autoLaunchAr?: boolean;
   aspect?: string; // tailwind aspect utility, e.g. "aspect-[4/3]"
   showChip?: boolean;
 };
@@ -37,6 +39,7 @@ export function InteractiveModelCard({
   usdzUrl,
   itemName,
   defaultMode = "photo",
+  autoLaunchAr = false,
   aspect = "aspect-[4/3]",
   showChip = true,
 }: Props) {
@@ -64,14 +67,36 @@ export function InteractiveModelCard({
     return () => window.removeEventListener("keydown", onKey);
   }, [mode]);
 
+  useEffect(() => {
+    if (mode !== "3d" || !mvReady || !autoLaunchAr || !ref.current) return;
+    const el = ref.current as unknown as {
+      addEventListener: (ev: string, fn: () => void) => void;
+      removeEventListener: (ev: string, fn: () => void) => void;
+      activateAR?: () => Promise<void> | void;
+    };
+    let launched = false;
+    const onLoad = () => {
+      if (launched || !el.activateAR) return;
+      launched = true;
+      try {
+        void el.activateAR();
+      } catch {
+        /* browser blocked or unsupported */
+      }
+    };
+    el.addEventListener("load", onLoad);
+    return () => el.removeEventListener("load", onLoad);
+  }, [mode, mvReady, autoLaunchAr]);
+
   const hasModel = Boolean(glbUrl);
 
   return (
     <div className={`relative ${aspect} overflow-hidden rounded-2xl bg-[var(--mint-tint)]`}>
       {mode === "photo" || !hasModel ? (
-        <img
+        <SafeImage
           src={photoUrl}
           alt={photoAlt}
+          itemName={itemName}
           className="h-full w-full object-cover"
           loading="lazy"
         />
@@ -84,6 +109,9 @@ export function InteractiveModelCard({
             ios-src={usdzUrl ?? undefined}
             poster={photoUrl}
             alt={`Interactive 3D preview of ${itemName}`}
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            ar-scale="fixed"
             camera-controls
             touch-action="none"
             auto-rotate
@@ -92,12 +120,22 @@ export function InteractiveModelCard({
             interaction-prompt="auto"
             disable-zoom={false}
             reveal={mvReady ? "auto" : "manual"}
-            style={{ width: "100%", height: "100%", backgroundColor: "transparent", touchAction: "none", cursor: "grab" }}
+            style={{
+              width: "100%",
+              height: "100%",
+              backgroundColor: "transparent",
+              touchAction: "none",
+              cursor: "grab",
+            }}
           >
+            {/* Suppress model-viewer's built-in AR button — AR is entered via
+                the "View in AR" CTA (?ar=1 + autoLaunchAr), not a second
+                on-model affordance. */}
+            <button slot="ar-button" aria-hidden="true" tabIndex={-1} style={{ display: "none" }} />
             <div slot="poster" className="h-full w-full">
               <img src={photoUrl} alt="" className="h-full w-full object-cover" />
             </div>
-          {/* @ts-expect-error */}
+            {/* @ts-expect-error custom element */}
           </model-viewer>
         </>
       )}

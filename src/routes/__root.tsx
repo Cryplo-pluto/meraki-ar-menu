@@ -80,7 +80,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Meraki Cafe" },
-      { name: "description", content: "Meraki is Lusaka's home for homemade meals, decadent cakes and good coffee. Dine in at three locations or order online for delivery. Simple. Fresh. Delicious." },
+      {
+        name: "description",
+        content:
+          "Meraki is Lusaka's home for homemade meals, decadent cakes and good coffee. Dine in at three locations or order online for delivery. Simple. Fresh. Delicious.",
+      },
       { name: "author", content: "Meraki Cafe" },
       { property: "og:site_name", content: "Meraki Cafe Lusaka" },
       { property: "og:type", content: "website" },
@@ -90,7 +94,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Nunito+Sans:wght@400;600;700;800;900&family=Caveat:wght@400;600;700&display=swap",
+      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
     scripts: [
@@ -100,7 +107,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "@context": "https://schema.org",
           "@type": "Restaurant",
           name: "Meraki Cafe Lusaka",
-          description: "Homemade food, cakes and coffee cafe with three branches in Lusaka, Zambia.",
+          description:
+            "Homemade food, cakes and coffee cafe with three branches in Lusaka, Zambia.",
           servesCuisine: ["Cafe", "Breakfast", "Cakes"],
           priceRange: "$$",
           areaServed: "Lusaka, Zambia",

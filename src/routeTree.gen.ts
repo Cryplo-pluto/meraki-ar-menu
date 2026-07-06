@@ -17,7 +17,9 @@ import { Route as MenuRouteImport } from './routes/menu'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
+import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as CreditsRouteImport } from './routes/credits'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CateringRouteImport } from './routes/catering'
 import { Route as CakesRouteImport } from './routes/cakes'
 import { Route as CakeBuilderRouteImport } from './routes/cake-builder'
@@ -32,6 +34,7 @@ import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as CakesSlugRouteImport } from './routes/cakes.$slug'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as MenuCategoryIndexRouteImport } from './routes/menu.$category.index'
 import { Route as MenuCategorySlugRouteImport } from './routes/menu.$category.$slug'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
@@ -75,9 +78,19 @@ const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
   path: '/llms.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CreditsRoute = CreditsRouteImport.update({
   id: '/credits',
   path: '/credits',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CateringRoute = CateringRouteImport.update({
@@ -152,6 +165,11 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const MenuCategoryIndexRoute = MenuCategoryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MenuCategoryRoute,
+} as any)
 const MenuCategorySlugRoute = MenuCategorySlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -171,7 +189,9 @@ export interface FileRoutesByFullPath {
   '/cake-builder': typeof CakeBuilderRoute
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
+  '/contact': typeof ContactRoute
   '/credits': typeof CreditsRoute
+  '/gallery': typeof GalleryRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
   '/mcp': typeof McpRoute
@@ -190,6 +210,7 @@ export interface FileRoutesByFullPath {
   '/menu/': typeof MenuIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
+  '/menu/$category/': typeof MenuCategoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -197,7 +218,9 @@ export interface FileRoutesByTo {
   '/ar': typeof ArRoute
   '/cake-builder': typeof CakeBuilderRoute
   '/catering': typeof CateringRoute
+  '/contact': typeof ContactRoute
   '/credits': typeof CreditsRoute
+  '/gallery': typeof GalleryRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/mcp': typeof McpRoute
   '/order': typeof OrderRoute
@@ -208,12 +231,12 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
-  '/menu/$category': typeof MenuCategoryRouteWithChildren
   '/cakes': typeof CakesIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/menu': typeof MenuIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
+  '/menu/$category': typeof MenuCategoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -223,7 +246,9 @@ export interface FileRoutesById {
   '/cake-builder': typeof CakeBuilderRoute
   '/cakes': typeof CakesRouteWithChildren
   '/catering': typeof CateringRoute
+  '/contact': typeof ContactRoute
   '/credits': typeof CreditsRoute
+  '/gallery': typeof GalleryRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
   '/mcp': typeof McpRoute
@@ -242,6 +267,7 @@ export interface FileRoutesById {
   '/menu/': typeof MenuIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
+  '/menu/$category/': typeof MenuCategoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -252,7 +278,9 @@ export interface FileRouteTypes {
     | '/cake-builder'
     | '/cakes'
     | '/catering'
+    | '/contact'
     | '/credits'
+    | '/gallery'
     | '/llms.txt'
     | '/locations'
     | '/mcp'
@@ -271,6 +299,7 @@ export interface FileRouteTypes {
     | '/menu/'
     | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
+    | '/menu/$category/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -278,7 +307,9 @@ export interface FileRouteTypes {
     | '/ar'
     | '/cake-builder'
     | '/catering'
+    | '/contact'
     | '/credits'
+    | '/gallery'
     | '/llms.txt'
     | '/mcp'
     | '/order'
@@ -289,12 +320,12 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
-    | '/menu/$category'
     | '/cakes'
     | '/locations'
     | '/menu'
     | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
+    | '/menu/$category'
   id:
     | '__root__'
     | '/'
@@ -303,7 +334,9 @@ export interface FileRouteTypes {
     | '/cake-builder'
     | '/cakes'
     | '/catering'
+    | '/contact'
     | '/credits'
+    | '/gallery'
     | '/llms.txt'
     | '/locations'
     | '/mcp'
@@ -322,6 +355,7 @@ export interface FileRouteTypes {
     | '/menu/'
     | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
+    | '/menu/$category/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -331,7 +365,9 @@ export interface RootRouteChildren {
   CakeBuilderRoute: typeof CakeBuilderRoute
   CakesRoute: typeof CakesRouteWithChildren
   CateringRoute: typeof CateringRoute
+  ContactRoute: typeof ContactRoute
   CreditsRoute: typeof CreditsRoute
+  GalleryRoute: typeof GalleryRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   LocationsRoute: typeof LocationsRouteWithChildren
   McpRoute: typeof McpRoute
@@ -403,11 +439,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LlmsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/credits': {
       id: '/credits'
       path: '/credits'
       fullPath: '/credits'
       preLoaderRoute: typeof CreditsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catering': {
@@ -508,6 +558,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/menu/$category/': {
+      id: '/menu/$category/'
+      path: '/'
+      fullPath: '/menu/$category/'
+      preLoaderRoute: typeof MenuCategoryIndexRouteImport
+      parentRoute: typeof MenuCategoryRoute
+    }
     '/menu/$category/$slug': {
       id: '/menu/$category/$slug'
       path: '/$slug'
@@ -553,10 +610,12 @@ const LocationsRouteWithChildren = LocationsRoute._addFileChildren(
 
 interface MenuCategoryRouteChildren {
   MenuCategorySlugRoute: typeof MenuCategorySlugRoute
+  MenuCategoryIndexRoute: typeof MenuCategoryIndexRoute
 }
 
 const MenuCategoryRouteChildren: MenuCategoryRouteChildren = {
   MenuCategorySlugRoute: MenuCategorySlugRoute,
+  MenuCategoryIndexRoute: MenuCategoryIndexRoute,
 }
 
 const MenuCategoryRouteWithChildren = MenuCategoryRoute._addFileChildren(
@@ -582,7 +641,9 @@ const rootRouteChildren: RootRouteChildren = {
   CakeBuilderRoute: CakeBuilderRoute,
   CakesRoute: CakesRouteWithChildren,
   CateringRoute: CateringRoute,
+  ContactRoute: ContactRoute,
   CreditsRoute: CreditsRoute,
+  GalleryRoute: GalleryRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   LocationsRoute: LocationsRouteWithChildren,
   McpRoute: McpRoute,

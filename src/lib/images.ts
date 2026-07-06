@@ -7,6 +7,28 @@
  * a small allowlist of hosts so we never render arbitrary third-party URLs.
  */
 
+import { isDemoStockUrl } from "./demo-images";
+
+/**
+ * Meraki's own published photos, hosted on their Cloudinary account. Real
+ * Meraki imagery, not stock — safe to mirror/reference directly. Excludes
+ * "demo-restaurant" paths, which are unreplaced template stock Meraki's own
+ * live site never swapped out (confirmed by inspecting their homepage HTML).
+ */
+export function isMerakiCloudinaryUrl(url: string): boolean {
+  try {
+    const u = new URL(url);
+    return (
+      u.protocol === "https:" &&
+      u.hostname === "res.cloudinary.com" &&
+      u.pathname.startsWith("/davidharven/") &&
+      !u.pathname.includes("demo-restaurant")
+    );
+  } catch {
+    return false;
+  }
+}
+
 function readEnv(name: string): string {
   // browser
   try {
@@ -24,8 +46,7 @@ function readEnv(name: string): string {
 }
 
 function getStorageBase(): string {
-  const url =
-    readEnv("VITE_SUPABASE_URL") || readEnv("SUPABASE_URL");
+  const url = readEnv("VITE_SUPABASE_URL") || readEnv("SUPABASE_URL");
   if (!url) return "";
   return url.replace(/\/+$/, "") + "/storage/v1/object/public/";
 }
@@ -37,27 +58,9 @@ export function isRealAsset(url: string | null | undefined): boolean {
   if (trimmed.startsWith("/images/meraki/")) return true;
   const base = getStorageBase();
   if (base && trimmed.startsWith(base)) return true;
+  if (isMerakiCloudinaryUrl(trimmed)) return true;
   if (isDemoStockUrl(trimmed)) return true;
   return false;
-}
-
-/**
- * Demo-mode stock hosts. Kept narrow: Unsplash and Pexels only, over HTTPS.
- * Both provide royalty-free imagery suitable for the pitch build.
- */
-const DEMO_STOCK_HOSTS = new Set([
-  "images.unsplash.com",
-  "plus.unsplash.com",
-  "images.pexels.com",
-]);
-
-export function isDemoStockUrl(url: string): boolean {
-  try {
-    const u = new URL(url);
-    return u.protocol === "https:" && DEMO_STOCK_HOSTS.has(u.hostname);
-  } catch {
-    return false;
-  }
 }
 
 /** True only if the setting resolves to a URL we host ourselves. */

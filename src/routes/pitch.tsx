@@ -48,7 +48,7 @@ const BULLETS = [
 ];
 
 function PitchPage() {
-  const [demoUrl, setDemoUrl] = useState("https://meraki-ar-menu.lovable.app/menu");
+  const [demoUrl, setDemoUrl] = useState("");
   useEffect(() => {
     if (typeof window !== "undefined") {
       setDemoUrl(`${window.location.origin}/menu/burgers/meraki-classic-burger?ar=1`);
@@ -82,15 +82,17 @@ function PitchPage() {
 
           <aside className="flex flex-col items-center gap-4 rounded-3xl bg-[var(--charcoal)] p-8 text-center text-[var(--cream)]">
             <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">Scan me</p>
-            <div className="rounded-2xl bg-[var(--cream)] p-4">
-              <QRCodeSVG
-                value={demoUrl}
-                size={220}
-                bgColor="#F1F2E3"
-                fgColor="#383832"
-                level="M"
-                includeMargin={false}
-              />
+            <div className="flex h-[220px] w-[220px] items-center justify-center rounded-2xl bg-[var(--cream)] p-4">
+              {demoUrl && (
+                <QRCodeSVG
+                  value={demoUrl}
+                  size={220}
+                  bgColor="#F1F2E3"
+                  fgColor="#383832"
+                  level="M"
+                  includeMargin={false}
+                />
+              )}
             </div>
             <p className="max-w-[220px] text-sm text-[var(--cream)]/85">
               Opens the Meraki Classic Burger in AR — place it on the table you're sitting at.

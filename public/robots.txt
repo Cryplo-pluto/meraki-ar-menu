@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://meraki-ar-menu.lovable.app/sitemap.xml
+# Sitemap: https://<your-production-domain>/sitemap.xml

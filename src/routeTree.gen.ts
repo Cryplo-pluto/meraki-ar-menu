@@ -14,7 +14,6 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PitchRouteImport } from './routes/pitch'
 import { Route as OrderRouteImport } from './routes/order'
 import { Route as MenuRouteImport } from './routes/menu'
-import { Route as McpRouteImport } from './routes/mcp'
 import { Route as LocationsRouteImport } from './routes/locations'
 import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as GalleryRouteImport } from './routes/gallery'
@@ -32,11 +31,8 @@ import { Route as CakesIndexRouteImport } from './routes/cakes.index'
 import { Route as MenuCategoryRouteImport } from './routes/menu.$category'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as CakesSlugRouteImport } from './routes/cakes.$slug'
-import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
-import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as MenuCategoryIndexRouteImport } from './routes/menu.$category.index'
 import { Route as MenuCategorySlugRouteImport } from './routes/menu.$category.$slug'
-import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 
 const TablePlannerRoute = TablePlannerRouteImport.update({
   id: '/table-planner',
@@ -61,11 +57,6 @@ const OrderRoute = OrderRouteImport.update({
 const MenuRoute = MenuRouteImport.update({
   id: '/menu',
   path: '/menu',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LocationsRoute = LocationsRouteImport.update({
@@ -153,18 +144,6 @@ const CakesSlugRoute = CakesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => CakesRoute,
 } as any)
-const Char91DotwellKnownChar93OauthProtectedResourceRoute =
-  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
-    id: '/.well-known/oauth-protected-resource',
-    path: '/.well-known/oauth-protected-resource',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const Char91DotmcpChar93ListToolsRoute =
-  Char91DotmcpChar93ListToolsRouteImport.update({
-    id: '/.mcp/list-tools',
-    path: '/.mcp/list-tools',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const MenuCategoryIndexRoute = MenuCategoryIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -175,12 +154,6 @@ const MenuCategorySlugRoute = MenuCategorySlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => MenuCategoryRoute,
 } as any)
-const Char91DotmcpChar93InvokeToolToolRoute =
-  Char91DotmcpChar93InvokeToolToolRouteImport.update({
-    id: '/.mcp/invoke-tool/$tool',
-    path: '/.mcp/invoke-tool/$tool',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -194,21 +167,17 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
-  '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
   '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
-  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
-  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
   '/cakes/': typeof CakesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/menu/': typeof MenuIndexRoute
-  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
   '/menu/$category/': typeof MenuCategoryIndexRoute
 }
@@ -222,19 +191,15 @@ export interface FileRoutesByTo {
   '/credits': typeof CreditsRoute
   '/gallery': typeof GalleryRoute
   '/llms.txt': typeof LlmsDottxtRoute
-  '/mcp': typeof McpRoute
   '/order': typeof OrderRoute
   '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
-  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
-  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/cakes': typeof CakesIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/menu': typeof MenuIndexRoute
-  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
   '/menu/$category': typeof MenuCategoryIndexRoute
 }
@@ -251,21 +216,17 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/llms.txt': typeof LlmsDottxtRoute
   '/locations': typeof LocationsRouteWithChildren
-  '/mcp': typeof McpRoute
   '/menu': typeof MenuRouteWithChildren
   '/order': typeof OrderRoute
   '/pitch': typeof PitchRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/table-planner': typeof TablePlannerRoute
-  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
-  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
   '/cakes/': typeof CakesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/menu/': typeof MenuIndexRoute
-  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/menu/$category/$slug': typeof MenuCategorySlugRoute
   '/menu/$category/': typeof MenuCategoryIndexRoute
 }
@@ -283,21 +244,17 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/llms.txt'
     | '/locations'
-    | '/mcp'
     | '/menu'
     | '/order'
     | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
-    | '/.mcp/list-tools'
-    | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
     | '/cakes/'
     | '/locations/'
     | '/menu/'
-    | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
     | '/menu/$category/'
   fileRoutesByTo: FileRoutesByTo
@@ -311,19 +268,15 @@ export interface FileRouteTypes {
     | '/credits'
     | '/gallery'
     | '/llms.txt'
-    | '/mcp'
     | '/order'
     | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
-    | '/.mcp/list-tools'
-    | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/cakes'
     | '/locations'
     | '/menu'
-    | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
     | '/menu/$category'
   id:
@@ -339,21 +292,17 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/llms.txt'
     | '/locations'
-    | '/mcp'
     | '/menu'
     | '/order'
     | '/pitch'
     | '/sitemap.xml'
     | '/table-planner'
-    | '/.mcp/list-tools'
-    | '/.well-known/oauth-protected-resource'
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
     | '/cakes/'
     | '/locations/'
     | '/menu/'
-    | '/.mcp/invoke-tool/$tool'
     | '/menu/$category/$slug'
     | '/menu/$category/'
   fileRoutesById: FileRoutesById
@@ -370,15 +319,11 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   LlmsDottxtRoute: typeof LlmsDottxtRoute
   LocationsRoute: typeof LocationsRouteWithChildren
-  McpRoute: typeof McpRoute
   MenuRoute: typeof MenuRouteWithChildren
   OrderRoute: typeof OrderRoute
   PitchRoute: typeof PitchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TablePlannerRoute: typeof TablePlannerRoute
-  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
-  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
-  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -416,13 +361,6 @@ declare module '@tanstack/react-router' {
       path: '/menu'
       fullPath: '/menu'
       preLoaderRoute: typeof MenuRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/locations': {
@@ -544,20 +482,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CakesSlugRouteImport
       parentRoute: typeof CakesRoute
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.mcp/list-tools': {
-      id: '/.mcp/list-tools'
-      path: '/.mcp/list-tools'
-      fullPath: '/.mcp/list-tools'
-      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/menu/$category/': {
       id: '/menu/$category/'
       path: '/'
@@ -571,13 +495,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/menu/$category/$slug'
       preLoaderRoute: typeof MenuCategorySlugRouteImport
       parentRoute: typeof MenuCategoryRoute
-    }
-    '/.mcp/invoke-tool/$tool': {
-      id: '/.mcp/invoke-tool/$tool'
-      path: '/.mcp/invoke-tool/$tool'
-      fullPath: '/.mcp/invoke-tool/$tool'
-      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -646,16 +563,11 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   LlmsDottxtRoute: LlmsDottxtRoute,
   LocationsRoute: LocationsRouteWithChildren,
-  McpRoute: McpRoute,
   MenuRoute: MenuRouteWithChildren,
   OrderRoute: OrderRoute,
   PitchRoute: PitchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TablePlannerRoute: TablePlannerRoute,
-  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
-  Char91DotwellKnownChar93OauthProtectedResourceRoute:
-    Char91DotwellKnownChar93OauthProtectedResourceRoute,
-  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

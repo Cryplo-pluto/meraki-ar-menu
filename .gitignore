@@ -20,10 +20,9 @@ dist-ssr
 .wrangler/
 .dev.vars
 
-# Env
+# Env — never commit any env file. Create .env by hand (see README).
 .env
 .env.*
-!.env.example
 
 # Supabase CLI local state (machine-specific link info)
 supabase/.temp/

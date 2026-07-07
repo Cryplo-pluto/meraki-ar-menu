@@ -23,19 +23,30 @@ npm install
 
 (If you received the project as a **zip** instead: unzip it, then run `npm install` inside the folder — `node_modules` is never included in the zip.)
 
-### 3. Create your `.env`
+### 3. Create your `.env` by hand
 
-Secrets are **not** in the repo. Copy the template and fill it in:
+There is **no `.env.example`** — create a new file named `.env` in the project
+root and paste the block below. These three values (URL, project ref,
+publishable key) are **not secret** — the publishable key is designed to ship
+in the browser — so they're safe to keep here for convenience:
 
 ```sh
-# Windows (PowerShell)
-Copy-Item .env.example .env
-
-# macOS / Linux
-cp .env.example .env
+SUPABASE_URL="https://lbmrywnejlrmmcnehnya.supabase.co"
+SUPABASE_PROJECT_ID="lbmrywnejlrmmcnehnya"
+SUPABASE_PUBLISHABLE_KEY="sb_publishable_toAR0AKwlZN0vLvTB1ClLA_yAdslBcV"
+VITE_SUPABASE_URL="https://lbmrywnejlrmmcnehnya.supabase.co"
+VITE_SUPABASE_PROJECT_ID="lbmrywnejlrmmcnehnya"
+VITE_SUPABASE_PUBLISHABLE_KEY="sb_publishable_toAR0AKwlZN0vLvTB1ClLA_yAdslBcV"
 ```
 
-Then open `.env` and fill in the values. Each one is explained below.
+That's everything the app needs to run. The optional CLI/admin variables
+(access token, DB password, service-role key) are only needed to _change_ the
+database or upload AR models — see the table below. `.env` is gitignored, so it
+never lands in the repo; recreate it on each machine (or copy it across
+privately — never by email, chat, or git).
+
+> If the publishable key is ever rotated in the Supabase dashboard, update all
+> four `*PUBLISHABLE_KEY*` occurrences here and in your `.env`.
 
 ### 4. Run it
 
@@ -60,11 +71,11 @@ Open **http://localhost:8080** — that's it.
 
 **Rules of thumb:**
 
-- `.env` is gitignored and must stay that way. Move it between machines by USB stick or a password manager — never by email, chat, or git.
+- `.env` is gitignored and must stay that way. There is no committed template — recreate `.env` from the block above (or copy it across privately).
 - The `VITE_*` variables are shipped to the browser; that's fine — they're the _publishable_ values. Everything without the `VITE_` prefix stays on the server.
-- If a token/key ever leaks, revoke it in the Supabase dashboard and generate a new one.
+- Only the **secret** values matter: the `sbp_...` access token, the `sb_secret_...` service-role key, and the DB password. Never commit or share those; if one leaks, revoke it in the Supabase dashboard and generate a new one.
 
-The Supabase project itself lives under the **"Yange"** organisation of your Supabase account (project name `meraki-cafe`, region `eu-central-1`).
+The Supabase project is `meraki-cafe` (ref `lbmrywnejlrmmcnehnya`).
 
 ---
 
@@ -83,18 +94,27 @@ The Supabase project itself lives under the **"Yange"** organisation of your Sup
 
 ## Database (Supabase)
 
-The full schema lives in this repo as SQL files under [`supabase/migrations/`](supabase/migrations/) — the database can always be rebuilt from scratch from them. To change the database:
+The full schema lives in this repo as SQL files under [`supabase/migrations/`](supabase/migrations/) — the database can always be rebuilt from scratch from them.
+
+**This repo is connected to Supabase via the GitHub integration.** That means:
+
+- New migration files merged to the production branch are **applied to the
+  database automatically** by Supabase — you normally don't run anything by hand.
+- Because merged SQL runs against the live database, treat migration files like
+  production access: only merge SQL you trust, and keep the repo private.
+
+To change the database:
 
 1. Add a new file: `supabase/migrations/<YYYYMMDDHHMMSS>_short_name.sql`
-2. Apply it:
-   ```sh
-   npx supabase db push
-   ```
-   (needs `SUPABASE_ACCESS_TOKEN` and `SUPABASE_DB_PASSWORD` in `.env`; the CLI reads them automatically)
+2. Commit and push it — the integration applies it on merge.
 
-On a brand-new Supabase project you would instead run `npx supabase link --project-ref <ref>` once, then `npx supabase db push --include-all`.
+**Manual fallback** (if you're not using the integration, or need to apply
+immediately): `npx supabase db push` — this needs `SUPABASE_ACCESS_TOKEN` and
+`SUPABASE_DB_PASSWORD` in `.env`. On a fresh checkout run
+`npx supabase link --project-ref lbmrywnejlrmmcnehnya` once first.
 
-**Never edit an already-applied migration** — always add a new one.
+**Never edit an already-applied migration** — always add a new one, so the
+files and the database's migration history stay in lockstep.
 
 Tables: `menu_items`, `branches`, `size_classes`, `cake_builder_options`, `site_settings`, `reviews`, `orders`, `order_items`, `contact_messages`, `catering_requests`, `quote_requests`, `user_roles`. Guest-facing forms (contact / catering / quote / reviews / orders) allow public _inserts_ only; reading submissions requires a staff/admin role.
 

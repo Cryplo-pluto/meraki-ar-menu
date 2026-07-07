@@ -28,6 +28,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as MenuIndexRouteImport } from './routes/menu.index'
 import { Route as LocationsIndexRouteImport } from './routes/locations.index'
 import { Route as CakesIndexRouteImport } from './routes/cakes.index'
+import { Route as QuoteRequestAQuoteRouteImport } from './routes/quote.request-a-quote'
 import { Route as MenuCategoryRouteImport } from './routes/menu.$category'
 import { Route as LocationsSlugRouteImport } from './routes/locations.$slug'
 import { Route as CakesSlugRouteImport } from './routes/cakes.$slug'
@@ -129,6 +130,11 @@ const CakesIndexRoute = CakesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CakesRoute,
 } as any)
+const QuoteRequestAQuoteRoute = QuoteRequestAQuoteRouteImport.update({
+  id: '/quote/request-a-quote',
+  path: '/quote/request-a-quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MenuCategoryRoute = MenuCategoryRouteImport.update({
   id: '/$category',
   path: '/$category',
@@ -175,6 +181,7 @@ export interface FileRoutesByFullPath {
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
+  '/quote/request-a-quote': typeof QuoteRequestAQuoteRoute
   '/cakes/': typeof CakesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/menu/': typeof MenuIndexRoute
@@ -197,6 +204,7 @@ export interface FileRoutesByTo {
   '/table-planner': typeof TablePlannerRoute
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
+  '/quote/request-a-quote': typeof QuoteRequestAQuoteRoute
   '/cakes': typeof CakesIndexRoute
   '/locations': typeof LocationsIndexRoute
   '/menu': typeof MenuIndexRoute
@@ -224,6 +232,7 @@ export interface FileRoutesById {
   '/cakes/$slug': typeof CakesSlugRoute
   '/locations/$slug': typeof LocationsSlugRoute
   '/menu/$category': typeof MenuCategoryRouteWithChildren
+  '/quote/request-a-quote': typeof QuoteRequestAQuoteRoute
   '/cakes/': typeof CakesIndexRoute
   '/locations/': typeof LocationsIndexRoute
   '/menu/': typeof MenuIndexRoute
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
+    | '/quote/request-a-quote'
     | '/cakes/'
     | '/locations/'
     | '/menu/'
@@ -274,6 +284,7 @@ export interface FileRouteTypes {
     | '/table-planner'
     | '/cakes/$slug'
     | '/locations/$slug'
+    | '/quote/request-a-quote'
     | '/cakes'
     | '/locations'
     | '/menu'
@@ -300,6 +311,7 @@ export interface FileRouteTypes {
     | '/cakes/$slug'
     | '/locations/$slug'
     | '/menu/$category'
+    | '/quote/request-a-quote'
     | '/cakes/'
     | '/locations/'
     | '/menu/'
@@ -324,6 +336,7 @@ export interface RootRouteChildren {
   PitchRoute: typeof PitchRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TablePlannerRoute: typeof TablePlannerRoute
+  QuoteRequestAQuoteRoute: typeof QuoteRequestAQuoteRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -461,6 +474,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CakesIndexRouteImport
       parentRoute: typeof CakesRoute
     }
+    '/quote/request-a-quote': {
+      id: '/quote/request-a-quote'
+      path: '/quote/request-a-quote'
+      fullPath: '/quote/request-a-quote'
+      preLoaderRoute: typeof QuoteRequestAQuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/menu/$category': {
       id: '/menu/$category'
       path: '/$category'
@@ -568,6 +588,7 @@ const rootRouteChildren: RootRouteChildren = {
   PitchRoute: PitchRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TablePlannerRoute: TablePlannerRoute,
+  QuoteRequestAQuoteRoute: QuoteRequestAQuoteRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -17,6 +17,6 @@ The brand has since blossomed into three upmarket restaurants, a pioneering conf
 
 These include over 20 various packaged products that range from dry ready to bake cake pre-mixes, frozen desserts and pastries. The business is now venturing into other lines of fresh food value addition and possibly exports. The business currently employs 94 staff, all based in Lusaka, Zambia.
 
-Some of the things that stand out in our business strategy include re-investing in our core competencies, packaging, location, customer diversification and visibility of our ideals. Our aim is to keep our customers happy by delivering simple, fresh and delicious at every interaction.$story$
+Some of the things that stand out in our business strategy include re-investing in our core competencies, packaging, location, customer diversification and visibility of our ideals. Our aim is to keep our customers happy by delivering simple, fresh and delicious at every interaction.$story$::text
 ), updated_at = now()
   WHERE key = 'story_md';

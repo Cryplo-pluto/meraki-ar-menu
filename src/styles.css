@@ -54,24 +54,24 @@
 :root {
   --radius: 0.75rem;
   /* Meraki brand palette — sampled directly from meraki.co.zm's own restaurant.css :root */
-  --mint: #89CCB4;
-  --mint-tint: #E5F2E8;
+  --mint: #89ccb4;
+  --mint-tint: #e5f2e8;
   --cream: #f9f6f3;
   --charcoal: #383632;
-  --paper: #FFFFFF;
+  --paper: #ffffff;
   --brand-black: #282725;
   --brand-medium-gray: #8d8987;
   --brand-red: #d51f0f;
-  --brand-yellow: #ECBA23;
+  --brand-yellow: #ecba23;
   --brand-green: #46b57e;
-  --brand-cedar: #8B5A2B;
+  --brand-cedar: #8b5a2b;
   --background: var(--cream);
   --foreground: var(--charcoal);
   --card: var(--paper);
   --card-foreground: var(--charcoal);
   --popover: var(--paper);
   --popover-foreground: var(--charcoal);
-  --primary: var(--mint);                   /* CTAs, section blocks */
+  --primary: var(--mint); /* CTAs, section blocks */
   --primary-foreground: var(--charcoal);
   --secondary: var(--charcoal);
   --secondary-foreground: var(--cream);
@@ -113,7 +113,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-weight: 700;
     text-transform: uppercase;
@@ -128,7 +131,9 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *,
+    *::before,
+    *::after {
       animation-duration: 0.001ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.001ms !important;
@@ -138,7 +143,12 @@
 }
 
 @utility scrim-gradient {
-  background: linear-gradient(to top, oklch(0.18 0.03 55 / 0.75) 0%, oklch(0.18 0.03 55 / 0.15) 50%, transparent 100%);
+  background: linear-gradient(
+    to top,
+    oklch(0.18 0.03 55 / 0.75) 0%,
+    oklch(0.18 0.03 55 / 0.15) 50%,
+    transparent 100%
+  );
 }
 
 @utility container-page {
@@ -152,8 +162,12 @@
 }
 
 @keyframes marquee-slide {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @utility marquee-track {
@@ -163,7 +177,19 @@
 }
 
 @keyframes word-rotate {
-  0%, 22%   { opacity: 0; transform: translateY(8px); }
-  6%, 20%   { opacity: 1; transform: translateY(0); }
-  25%, 100% { opacity: 0; transform: translateY(-8px); }
+  0%,
+  22% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  6%,
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  25%,
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }

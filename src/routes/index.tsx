@@ -66,7 +66,7 @@ function Home() {
   const { items, branches, settings, reviews } = data;
   const heroImg = isRealAsset(settings.hero_image_url) ? settings.hero_image_url : REAL_HERO_IMAGE;
 
-  const topSellers = useMemo(
+  const prePacks = useMemo(
     () => items.filter((it) => it.is_hero || it.is_signature).slice(0, 6),
     [items],
   );
@@ -84,8 +84,8 @@ function Home() {
 
       <Marquee variant="outline" />
 
-      {/* TOP SELLERS — fan favourites, straight through to the menu. */}
-      <TopSellers items={topSellers} />
+      {/* PRE-PACKS — featured items with prices, like the live site's section. */}
+      <PrePacks items={prePacks} />
 
       {reviews.length > 0 && <ReviewsStrip reviews={reviews} />}
 
@@ -288,8 +288,8 @@ function StoryBand() {
 
     lastScrollYRef.current = window.scrollY;
 
-    // Freeze at the static front view once "Top Sellers" (id="menu") arrives.
-    const sentinel = document.getElementById("menu");
+    // Freeze at the static front view once "Pre-Packs" arrives.
+    const sentinel = document.getElementById("pre-packs");
     const observer = sentinel
       ? new IntersectionObserver(
           ([entry]) => {
@@ -401,7 +401,7 @@ function StoryBand() {
               About Meraki
             </Link>
             <Link
-              to="/catering"
+              to="/quote/request-a-quote"
               className="min-h-11 rounded-full bg-[var(--mint)] px-6 py-3 text-xs font-bold uppercase tracking-widest text-[var(--charcoal)] hover:brightness-95"
             >
               Get a quote
@@ -413,20 +413,19 @@ function StoryBand() {
   );
 }
 
-/* ---------- TOP SELLERS ---------- */
+/* ---------- PRE-PACKS ---------- */
 
-function TopSellers({ items }: { items: MenuItem[] }) {
+function PrePacks({ items }: { items: MenuItem[] }) {
   if (items.length === 0) return null;
   return (
-    <section id="menu" className="container-page py-20">
+    <section id="pre-packs" className="container-page py-20">
       <div className="text-center">
         <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">
-          Fan favourites
+          Ready when you are
         </p>
-        <h2 className="mt-3 font-display text-4xl md:text-5xl">Top Sellers</h2>
+        <h2 className="mt-3 font-display text-4xl md:text-5xl">Pre-Packs</h2>
         <p className="mx-auto mt-3 max-w-xl text-[color:var(--muted-foreground)]">
-          The dishes our regulars order again and again — see every one in true-scale AR before you
-          order.
+          A taste of the menu — favourites you can order straight away.
         </p>
       </div>
 

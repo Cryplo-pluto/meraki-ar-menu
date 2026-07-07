@@ -9,7 +9,11 @@ export const Route = createFileRoute("/menu/")({
   head: () => ({
     meta: [
       { title: "Menu — Meraki Cafe Lusaka" },
-      { name: "description", content: "Everything we cook, from all-day breakfasts to burgers, bowls and smoothies. See every dish in true-scale AR before you order." },
+      {
+        name: "description",
+        content:
+          "Everything we cook, from all-day breakfasts to burgers, bowls and smoothies. See every dish in true-scale AR before you order.",
+      },
       { property: "og:title", content: "Meraki Menu — Lusaka" },
       { property: "og:url", content: "/menu" },
     ],
@@ -18,12 +22,18 @@ export const Route = createFileRoute("/menu/")({
   errorComponent: ({ error }) => (
     <div className="container-page py-24 text-center">
       <h1 className="text-3xl">The menu didn't load</h1>
-      <p className="mt-3 text-muted-foreground">Likely a slow connection. Refresh to try again, or head to Locations for our branch details.</p>
+      <p className="mt-3 text-muted-foreground">
+        Likely a slow connection. Refresh to try again, or head to Locations for our branch details.
+      </p>
       <p className="mt-6 text-xs text-muted-foreground/70">Error: {error.message}</p>
     </div>
   ),
   notFoundComponent: () => <p className="container-page py-24">Not found.</p>,
-  pendingComponent: () => <p className="container-page py-24 text-center text-muted-foreground">Setting the table… your menu's on its way.</p>,
+  pendingComponent: () => (
+    <p className="container-page py-24 text-center text-muted-foreground">
+      Setting the table… your menu's on its way.
+    </p>
+  ),
 });
 
 function MenuIndex() {
@@ -38,10 +48,13 @@ function MenuIndex() {
   return (
     <div className="container-page py-12">
       <header className="mx-auto max-w-3xl text-center">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">Everything we cook</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+          Everything we cook
+        </p>
         <h1 className="mt-2 text-4xl md:text-5xl">What's cooking</h1>
         <p className="mt-4 text-lg text-muted-foreground">
-          Everything is made in our kitchen, fresh each morning — from all-day breakfasts to bowls, burgers and smoothies.
+          Everything is made in our kitchen, fresh each morning — from all-day breakfasts to bowls,
+          burgers and smoothies.
         </p>
       </header>
 
@@ -53,7 +66,10 @@ function MenuIndex() {
         </p>
       )}
 
-      <nav aria-label="Menu categories" className="sticky top-[68px] z-30 -mx-5 mt-10 overflow-x-auto border-b border-border/60 bg-background/85 px-5 py-3 backdrop-blur">
+      <nav
+        aria-label="Menu categories"
+        className="sticky top-[68px] z-30 -mx-5 mt-10 overflow-x-auto border-b border-border/60 bg-background/85 px-5 py-3 backdrop-blur"
+      >
         <ul className="flex min-w-max gap-2">
           {cats.map((c) => (
             <li key={c}>

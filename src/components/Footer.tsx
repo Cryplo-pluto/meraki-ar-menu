@@ -109,12 +109,12 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/catering" className="hover:text-[var(--mint)]">
+              <Link to="/contact" className="hover:text-[var(--mint)]">
                 Let&apos;s Talk
               </Link>
             </li>
             <li>
-              <Link to="/catering" className="hover:text-[var(--mint)]">
+              <Link to="/quote/request-a-quote" className="hover:text-[var(--mint)]">
                 Get A Quote
               </Link>
             </li>
@@ -131,7 +131,7 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <Link to="/catering" className="hover:text-[var(--mint)]">
+              <Link to="/quote/request-a-quote" className="hover:text-[var(--mint)]">
                 Event Planning
               </Link>
             </li>

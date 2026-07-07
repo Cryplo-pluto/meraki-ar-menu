@@ -42,11 +42,21 @@ export function NewsletterModal() {
     if (typeof window === "undefined") return;
     if (isSuppressed()) return;
     let fired = false;
-    const fire = () => { if (!fired) { fired = true; setOpen(true); } };
+    const fire = () => {
+      if (!fired) {
+        fired = true;
+        setOpen(true);
+      }
+    };
     const t = window.setTimeout(fire, DELAY_MS);
-    const onLeave = (e: MouseEvent) => { if (e.clientY <= 0) fire(); };
+    const onLeave = (e: MouseEvent) => {
+      if (e.clientY <= 0) fire();
+    };
     document.addEventListener("mouseleave", onLeave);
-    return () => { window.clearTimeout(t); document.removeEventListener("mouseleave", onLeave); };
+    return () => {
+      window.clearTimeout(t);
+      document.removeEventListener("mouseleave", onLeave);
+    };
   }, []);
 
   useEffect(() => {
@@ -60,10 +70,17 @@ export function NewsletterModal() {
     const last = focusables?.[(focusables?.length ?? 1) - 1];
     first?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") { e.preventDefault(); close(); }
-      else if (e.key === "Tab" && focusables && focusables.length > 0) {
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last?.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first?.focus(); }
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      } else if (e.key === "Tab" && focusables && focusables.length > 0) {
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last?.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first?.focus();
+        }
       }
     };
     document.addEventListener("keydown", onKey);
@@ -75,13 +92,15 @@ export function NewsletterModal() {
   }, [open]);
 
   function close() {
-    if (never) suppressForever(); else suppress();
+    if (never) suppressForever();
+    else suppress();
     setOpen(false);
   }
   function onSubscribe(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitted(true);
-    if (never) suppressForever(); else suppress();
+    if (never) suppressForever();
+    else suppress();
     window.setTimeout(() => setOpen(false), 1600);
   }
 
@@ -91,7 +110,9 @@ export function NewsletterModal() {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center px-4"
       role="presentation"
-      onClick={(e) => { if (e.target === e.currentTarget) close(); }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) close();
+      }}
     >
       <div className="absolute inset-0 bg-[var(--charcoal)]/60" aria-hidden="true" />
       <div
@@ -118,8 +139,14 @@ export function NewsletterModal() {
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
           <div className="flex flex-col items-center text-center">
-            <div className="mt-2 h-16 w-16 rounded-full bg-[var(--mint)] shadow-[0_0_0_10px_var(--mint-tint)]" aria-hidden="true" />
-            <h2 id="nl-title" className="mt-6 font-display text-3xl font-bold text-[var(--charcoal)]">
+            <div
+              className="mt-2 h-16 w-16 rounded-full bg-[var(--mint)] shadow-[0_0_0_10px_var(--mint-tint)]"
+              aria-hidden="true"
+            />
+            <h2
+              id="nl-title"
+              className="mt-6 font-display text-3xl font-bold text-[var(--charcoal)]"
+            >
               Stay in the Loop!
             </h2>
             <p id="nl-desc" className="mt-3 text-sm text-[color:var(--muted-foreground)]">
@@ -133,7 +160,9 @@ export function NewsletterModal() {
             </p>
           ) : (
             <form onSubmit={onSubscribe} className="mt-8 space-y-4">
-              <label htmlFor="nl-email" className="sr-only">Email address</label>
+              <label htmlFor="nl-email" className="sr-only">
+                Email address
+              </label>
               <input
                 id="nl-email"
                 type="email"

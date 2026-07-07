@@ -56,16 +56,19 @@ function CreditsPage() {
       <p className="text-xs font-bold uppercase tracking-[0.4em] text-[var(--mint)]">Credits</p>
       <h1 className="mt-3 font-display text-4xl md:text-5xl">Image &amp; Model Attribution</h1>
       <p className="mt-4 max-w-2xl text-[color:var(--muted-foreground)]">
-        This is a concept build. Meraki's own food and interior photography will replace
-        the stock imagery below once uploaded through the admin dashboard. All third-party
-        assets used in the meantime are listed here in good faith.
+        This is a concept build. Meraki's own food and interior photography will replace the stock
+        imagery below once uploaded through the admin dashboard. All third-party assets used in the
+        meantime are listed here in good faith.
       </p>
 
       <section className="mt-12">
         <h2 className="font-display text-2xl">Photography</h2>
         <ul className="mt-4 space-y-4">
           {IMAGE_SOURCES.map((s) => (
-            <li key={s.name} className="rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-5">
+            <li
+              key={s.name}
+              className="rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-5"
+            >
               <a
                 href={s.url}
                 target="_blank"
@@ -84,7 +87,10 @@ function CreditsPage() {
         <h2 className="font-display text-2xl">3D Models</h2>
         <ul className="mt-4 space-y-4">
           {MODEL_SOURCES.map((s) => (
-            <li key={s.name} className="rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-5">
+            <li
+              key={s.name}
+              className="rounded-2xl border border-[var(--charcoal)]/10 bg-[var(--paper)] p-5"
+            >
               <a
                 href={s.url}
                 target="_blank"

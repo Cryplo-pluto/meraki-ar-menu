@@ -80,7 +80,6 @@ function ItemPage() {
             glbUrl={item.effective_glb_url}
             usdzUrl={item.effective_usdz_url}
             itemName={item.name}
-            defaultMode={ar ? "3d" : item.is_hero ? "3d" : "photo"}
             autoLaunchAr={Boolean(ar)}
           />
           <p className="mt-2 text-xs text-muted-foreground">

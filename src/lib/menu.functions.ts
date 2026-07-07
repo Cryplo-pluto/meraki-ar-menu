@@ -40,7 +40,10 @@ export type Branch = {
 const ITEM_COLS =
   "id,slug,name,category,description,price_kwacha,image_url,image_alt,allergens,dimensions_label,glb_url,usdz_url,available_branches,is_available,is_signature,is_hero,sort_order,size_classes(reference_glb_url,reference_usdz_url,dimensions_label)";
 
-type RawItem = Omit<MenuItem, "effective_glb_url" | "effective_usdz_url" | "effective_dimensions_label"> & {
+type RawItem = Omit<
+  MenuItem,
+  "effective_glb_url" | "effective_usdz_url" | "effective_dimensions_label"
+> & {
   size_classes?: {
     reference_glb_url: string | null;
     reference_usdz_url: string | null;

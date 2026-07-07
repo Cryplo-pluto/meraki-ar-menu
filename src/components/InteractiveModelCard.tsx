@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { Box, Camera } from "lucide-react";
 import { SafeImage } from "./SafeImage";
 
 // Lazy-load model-viewer once on demand.
@@ -16,21 +15,16 @@ type Props = {
   glbUrl: string | null;
   usdzUrl?: string | null;
   itemName: string;
-  defaultMode?: "photo" | "3d";
   autoLaunchAr?: boolean;
   aspect?: string; // tailwind aspect utility, e.g. "aspect-[4/3]"
-  showChip?: boolean;
 };
 
 /**
- * Desktop interactive card: photo by default with a small "3D" chip.
- * Click the chip → swap the photo for an inline <model-viewer> the user can
- * drag to spin and scroll to zoom. Esc or the "Photo" chip returns to the
- * image. Model is only loaded when the user toggles into 3D, so the initial
- * paint stays photo-fast.
- *
- * On AR-capable mobile the primary CTA is still "View in AR" (rendered
- * elsewhere); this component complements it.
+ * Item media card: always shows the photo — no on-page 3D orbit/zoom.
+ * When the page is opened via the "View in AR" CTA (?ar=1 → autoLaunchAr),
+ * an invisible <model-viewer> is mounted behind the photo purely to hand off
+ * to the platform AR viewer (Scene Viewer on Android, Quick Look on iOS) as
+ * soon as the model loads. Desktop and non-AR visits never load the model.
  */
 export function InteractiveModelCard({
   photoUrl,
@@ -38,17 +32,15 @@ export function InteractiveModelCard({
   glbUrl,
   usdzUrl,
   itemName,
-  defaultMode = "photo",
   autoLaunchAr = false,
   aspect = "aspect-[4/3]",
-  showChip = true,
 }: Props) {
-  const [mode, setMode] = useState<"photo" | "3d">(glbUrl ? defaultMode : "photo");
   const [mvReady, setMvReady] = useState(false);
   const ref = useRef<HTMLElement | null>(null);
+  const wantAr = autoLaunchAr && Boolean(glbUrl);
 
   useEffect(() => {
-    if (mode !== "3d" || !glbUrl) return;
+    if (!wantAr) return;
     let cancelled = false;
     ensureModelViewer().then(() => {
       if (!cancelled) setMvReady(true);
@@ -56,26 +48,18 @@ export function InteractiveModelCard({
     return () => {
       cancelled = true;
     };
-  }, [mode, glbUrl]);
+  }, [wantAr]);
 
   useEffect(() => {
-    if (mode !== "3d") return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setMode("photo");
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [mode]);
-
-  useEffect(() => {
-    if (mode !== "3d" || !mvReady || !autoLaunchAr || !ref.current) return;
+    if (!wantAr || !mvReady || !ref.current) return;
     const el = ref.current as unknown as {
       addEventListener: (ev: string, fn: () => void) => void;
       removeEventListener: (ev: string, fn: () => void) => void;
       activateAR?: () => Promise<void> | void;
+      loaded?: boolean;
     };
     let launched = false;
-    const onLoad = () => {
+    const launch = () => {
       if (launched || !el.activateAR) return;
       launched = true;
       try {
@@ -84,82 +68,44 @@ export function InteractiveModelCard({
         /* browser blocked or unsupported */
       }
     };
-    el.addEventListener("load", onLoad);
-    return () => el.removeEventListener("load", onLoad);
-  }, [mode, mvReady, autoLaunchAr]);
-
-  const hasModel = Boolean(glbUrl);
+    // The model may already be loaded by the time this effect runs.
+    if (el.loaded) launch();
+    el.addEventListener("load", launch);
+    return () => el.removeEventListener("load", launch);
+  }, [wantAr, mvReady]);
 
   return (
     <div className={`relative ${aspect} overflow-hidden rounded-2xl bg-[var(--mint-tint)]`}>
-      {mode === "photo" || !hasModel ? (
-        <SafeImage
-          src={photoUrl}
-          alt={photoAlt}
-          itemName={itemName}
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
-      ) : (
-        <>
+      <SafeImage
+        src={photoUrl}
+        alt={photoAlt}
+        itemName={itemName}
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
+
+      {wantAr && mvReady && (
+        // Invisible AR launcher — sized so model-viewer initialises, but the
+        // photo above stays the only thing the user sees or can touch.
+        <div className="pointer-events-none absolute inset-0 opacity-0" aria-hidden="true">
           {/* @ts-expect-error custom element */}
           <model-viewer
             ref={ref}
             src={glbUrl!}
             ios-src={usdzUrl ?? undefined}
-            poster={photoUrl}
-            alt={`Interactive 3D preview of ${itemName}`}
+            alt={`AR launcher for ${itemName}`}
             ar
             ar-modes="webxr scene-viewer quick-look"
             ar-scale="fixed"
-            camera-controls
-            touch-action="none"
-            auto-rotate
-            auto-rotate-delay="0"
-            rotation-per-second="18deg"
-            interaction-prompt="auto"
-            disable-zoom={false}
-            reveal={mvReady ? "auto" : "manual"}
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "transparent",
-              touchAction: "none",
-              cursor: "grab",
-            }}
+            reveal="auto"
+            style={{ width: "100%", height: "100%", backgroundColor: "transparent" }}
           >
-            {/* Suppress model-viewer's built-in AR button — AR is entered via
-                the "View in AR" CTA (?ar=1 + autoLaunchAr), not a second
-                on-model affordance. */}
+            {/* Suppress model-viewer's built-in AR button — AR is entered
+                automatically via activateAR above. */}
             <button slot="ar-button" aria-hidden="true" tabIndex={-1} style={{ display: "none" }} />
-            <div slot="poster" className="h-full w-full">
-              <img src={photoUrl} alt="" className="h-full w-full object-cover" />
-            </div>
             {/* @ts-expect-error custom element */}
           </model-viewer>
-        </>
-      )}
-
-      {showChip && hasModel && (
-        <button
-          type="button"
-          onClick={() => setMode(mode === "photo" ? "3d" : "photo")}
-          className="absolute right-3 top-3 z-10 inline-flex min-h-9 items-center gap-1.5 rounded-full bg-[var(--charcoal)]/85 px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-[var(--cream)] backdrop-blur transition hover:bg-[var(--charcoal)]"
-          aria-pressed={mode === "3d"}
-          aria-label={mode === "3d" ? "Switch back to photo" : `Rotate ${itemName} in 3D`}
-        >
-          {mode === "3d" ? (
-            <>
-              <Camera className="h-3.5 w-3.5" aria-hidden="true" />
-              Photo
-            </>
-          ) : (
-            <>
-              <Box className="h-3.5 w-3.5" aria-hidden="true" />
-              3D
-            </>
-          )}
-        </button>
+        </div>
       )}
     </div>
   );

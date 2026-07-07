@@ -20,7 +20,9 @@ export const Route = createFileRoute("/llms.txt")({
         if (story) {
           lines.push(story);
         } else {
-          lines.push("Homemade cafe and cakery operating since 2008 with three branches in Lusaka, Zambia.");
+          lines.push(
+            "Homemade cafe and cakery operating since 2008 with three branches in Lusaka, Zambia.",
+          );
         }
         lines.push("");
 
@@ -68,7 +70,9 @@ export const Route = createFileRoute("/llms.txt")({
         }
 
         lines.push("## AR menu");
-        lines.push("Every dish on the site can be viewed at true real-world size in AR from any modern iPhone or Android — no app required.");
+        lines.push(
+          "Every dish on the site can be viewed at true real-world size in AR from any modern iPhone or Android — no app required.",
+        );
         lines.push("");
         lines.push("## Currency");
         lines.push("All prices are in Zambian Kwacha, formatted as K450.");
